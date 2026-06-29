@@ -865,15 +865,13 @@ h3 {
 .graph-topbar,
 .graph-intro,
 .graph-tools,
-.graph-workspace,
-.graph-legend {
+.graph-workspace {
   max-width: 1520px;
   margin-inline: auto;
 }
 
 .graph-tools,
-.graph-workspace,
-.graph-legend {
+.graph-workspace {
   max-width: min(1520px, calc(100% - 36px));
 }
 
@@ -967,7 +965,7 @@ h3 {
 }
 
 .graph-version span,
-.graph-tools span {
+.graph-tools label > span {
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 800;
@@ -988,7 +986,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) minmax(180px, 240px) auto minmax(180px, auto);
   gap: 10px;
-  align-items: end;
+  align-items: start;
   margin-bottom: 14px;
   border: 1px solid var(--line);
   border-radius: 0;
@@ -999,6 +997,11 @@ h3 {
 .graph-tools label {
   display: grid;
   gap: 5px;
+}
+
+.graph-search-group {
+  display: grid;
+  gap: 10px;
 }
 
 .graph-tools input,
@@ -1024,6 +1027,7 @@ h3 {
 }
 
 .graph-reset {
+  margin-top: 25px;
   min-height: 40px;
   border: 1px solid var(--orange);
   border-radius: 0;
@@ -1036,7 +1040,7 @@ h3 {
 }
 
 .graph-stats {
-  margin: 0;
+  margin: 35px 0 0;
   color: var(--muted);
   font-size: 0.9rem;
   text-align: right;
@@ -1269,13 +1273,13 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 14px;
+  margin-top: 0;
   color: var(--muted);
   font-size: 0.9rem;
   font-weight: 750;
 }
 
-.graph-legend span {
+.graph-legend > span {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1345,6 +1349,11 @@ h3 {
   .graph-intro,
   .graph-tools {
     grid-template-columns: 1fr;
+  }
+
+  .graph-reset,
+  .graph-stats {
+    margin-top: 0;
   }
 
   .graph-stats {

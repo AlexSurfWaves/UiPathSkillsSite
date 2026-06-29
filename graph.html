@@ -12,13 +12,7 @@
         <a class="site-logo graph-brand" href="./index.html" aria-label="UiPath Skills Navigator">
           <img class="site-logo-mark" src="./assets/uipath-glyph-square64px.png" alt="" aria-hidden="true">
           <span class="site-logo-text">UiPath</span>
-          <span class="site-logo-section">Skills Knowledge Graph</span>
         </a>
-        <nav class="graph-nav site-nav" aria-label="Navigazione sito">
-          <a href="./index.html" data-i18n="ui.navigator">Navigator</a>
-          <a href="./index.html#guideTitle" data-i18n="ui.developersNav" class="is-active">Developers</a>
-          <a href="https://github.com/UiPath/skills/tree/main/skills" data-i18n="ui.repo">Repository</a>
-        </nav>
         <section class="language-panel graph-language header-language" data-language-selector aria-label="Selezione lingua"></section>
       </header>
 
@@ -40,10 +34,19 @@
       </section>
 
       <section class="graph-tools" aria-label="Filtri grafo">
-        <label for="graphSearch">
-          <span data-i18n="ui.graphSearch">Cerca skill</span>
-          <input id="graphSearch" type="search" placeholder="platform, flow, agent..." autocomplete="off" data-i18n-placeholder="graphSearch">
-        </label>
+        <div class="graph-search-group">
+          <label for="graphSearch">
+            <span data-i18n="ui.graphSearch">Cerca skill</span>
+            <input id="graphSearch" type="search" placeholder="platform, flow, agent..." autocomplete="off" data-i18n-placeholder="graphSearch">
+          </label>
+          <div class="graph-legend" aria-label="Legenda grafo" data-i18n-aria="ui.legend">
+            <span><i class="legend-dot design"></i><span data-i18n="ui.design">Design</span></span>
+            <span><i class="legend-dot build"></i><span data-i18n="ui.build">Build</span></span>
+            <span><i class="legend-dot integrate"></i><span data-i18n="ui.integrate">Integra</span></span>
+            <span><i class="legend-dot deploy"></i><span data-i18n="ui.deploy">Deploy</span></span>
+            <span><i class="legend-dot operate"></i><span data-i18n="ui.operate">Operate</span></span>
+          </div>
+        </div>
         <label for="graphPhase">
           <span data-i18n="ui.graphPhase">Fase</span>
           <select id="graphPhase">
@@ -94,14 +97,6 @@
             <div id="graphIncoming" class="graph-link-list"></div>
           </div>
         </aside>
-      </section>
-
-      <section class="graph-legend" aria-label="Legenda grafo" data-i18n-aria="ui.legend">
-        <span><i class="legend-dot design"></i><span data-i18n="ui.design">Design</span></span>
-        <span><i class="legend-dot build"></i><span data-i18n="ui.build">Build</span></span>
-        <span><i class="legend-dot integrate"></i><span data-i18n="ui.integrate">Integra</span></span>
-        <span><i class="legend-dot deploy"></i><span data-i18n="ui.deploy">Deploy</span></span>
-        <span><i class="legend-dot operate"></i><span data-i18n="ui.operate">Operate</span></span>
       </section>
     </main>
 
