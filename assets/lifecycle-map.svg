@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 180" role="img" aria-labelledby="title desc">
+  <title id="title">UiPath lifecycle map</title>
+  <desc id="desc">Sequenza visuale: discovery e design, build, integrate, deploy, operate, improve.</desc>
+  <rect width="1180" height="180" fill="#ffffff"/>
+  <path d="M0 0h1180v180H0z" fill="#f7faf8"/>
+  <path d="M42 94h1096" stroke="#b8c5be" stroke-width="5" stroke-linecap="round"/>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">
+    <g transform="translate(70 42)">
+      <rect width="145" height="92" rx="8" fill="#fff4ef" stroke="#ff5a1f" stroke-width="2"/>
+      <circle cx="28" cy="30" r="12" fill="#ff5a1f"/>
+      <text x="52" y="36" fill="#16211f">Discover</text>
+      <text x="20" y="70" fill="#62706c" font-size="13" font-weight="600">Opportunity, SDD</text>
+    </g>
+    <g transform="translate(258 42)">
+      <rect width="145" height="92" rx="8" fill="#eef8f8" stroke="#057a8a" stroke-width="2"/>
+      <circle cx="28" cy="30" r="12" fill="#057a8a"/>
+      <text x="52" y="36" fill="#16211f">Build</text>
+      <text x="20" y="70" fill="#62706c" font-size="13" font-weight="600">RPA, Flow, Agent</text>
+    </g>
+    <g transform="translate(446 42)">
+      <rect width="145" height="92" rx="8" fill="#eef4ef" stroke="#356859" stroke-width="2"/>
+      <circle cx="28" cy="30" r="12" fill="#356859"/>
+      <text x="52" y="36" fill="#16211f">Integrate</text>
+      <text x="20" y="70" fill="#62706c" font-size="13" font-weight="600">HITL, IXP, data</text>
+    </g>
+    <g transform="translate(634 42)">
+      <rect width="145" height="92" rx="8" fill="#fff8e6" stroke="#f2b84b" stroke-width="2"/>
+      <circle cx="28" cy="30" r="12" fill="#f2b84b"/>
+      <text x="52" y="36" fill="#16211f">Deploy</text>
+      <text x="20" y="70" fill="#62706c" font-size="13" font-weight="600">.uipx, publish</text>
+    </g>
+    <g transform="translate(822 42)">
+      <rect width="145" height="92" rx="8" fill="#f3edf9" stroke="#ad2f68" stroke-width="2"/>
+      <circle cx="28" cy="30" r="12" fill="#ad2f68"/>
+      <text x="52" y="36" fill="#16211f">Operate</text>
+      <text x="20" y="70" fill="#62706c" font-size="13" font-weight="600">jobs, tenant, test</text>
+    </g>
+    <g transform="translate(1010 42)">
+      <rect width="145" height="92" rx="8" fill="#eef4ef" stroke="#16211f" stroke-width="2"/>
+      <circle cx="28" cy="30" r="12" fill="#16211f"/>
+      <text x="52" y="36" fill="#16211f">Improve</text>
+      <text x="20" y="70" fill="#62706c" font-size="13" font-weight="600">review, fix, learn</text>
+    </g>
+  </g>
+</svg>

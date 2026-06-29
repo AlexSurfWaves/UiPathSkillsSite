@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UiPath Skills Navigator per Codex</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-logo" href="./index.html" aria-label="UiPath Skills Navigator">
+        <img class="site-logo-mark" src="./assets/uipath-glyph-square64px.png" alt="" aria-hidden="true">
+        <span class="site-logo-text">UiPath</span>
+      </a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="#lifecycleTitle" data-i18n="ui.platformNav">Platform</a>
+        <a href="#guideTitle" data-i18n="ui.developersNav" class="is-active">Developers</a>
+        <a href="#skillTitle" data-i18n="ui.agenticNav">Agentic automation</a>
+        <a href="./graph.html" data-i18n="ui.graphLink">Knowledge graph</a>
+      </nav>
+      <div class="site-actions">
+        <section class="language-panel header-language" data-language-selector aria-label="Selezione lingua"></section>
+        <a class="site-cta" href="https://github.com/UiPath/skills/tree/main/skills" data-i18n="ui.repo">Repository</a>
+      </div>
+    </header>
+
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navigazione skill">
+        <div class="brand">
+          <img class="brand-logo" src="./assets/uipath-glyph-square64px.png" alt="" aria-hidden="true">
+          <div>
+            <p class="eyebrow" data-i18n="ui.codingAgents">Coding agents</p>
+            <h1 data-i18n="ui.navigatorTitle">Skills Navigator</h1>
+          </div>
+        </div>
+
+        <label class="search-wrap" for="searchInput">
+          <span data-i18n="ui.search">Cerca</span>
+          <input id="searchInput" type="search" placeholder="RPA, Flow, deploy, test..." autocomplete="off" data-i18n-placeholder="search">
+        </label>
+
+        <div class="filters" aria-label="Filtri lifecycle">
+          <button class="filter-chip is-active" data-filter="all" type="button" data-i18n="ui.all">Tutte</button>
+          <button class="filter-chip" data-filter="design" type="button" data-i18n="ui.design">Design</button>
+          <button class="filter-chip" data-filter="build" type="button" data-i18n="ui.build">Build</button>
+          <button class="filter-chip" data-filter="integrate" type="button" data-i18n="ui.integrate">Integra</button>
+          <button class="filter-chip" data-filter="deploy" type="button" data-i18n="ui.deploy">Deploy</button>
+          <button class="filter-chip" data-filter="operate" type="button" data-i18n="ui.operate">Operate</button>
+        </div>
+
+        <a class="sidebar-link" href="./graph.html" data-i18n="ui.graphLink">Knowledge graph</a>
+
+        <nav id="skillList" class="skill-list" aria-label="Elenco skill"></nav>
+      </aside>
+
+      <main class="content">
+        <section class="top-band">
+          <div class="intro">
+            <p class="eyebrow" data-i18n="ui.catalogEyebrow">Catalogo analizzato dal repository UiPath/skills</p>
+            <h2 data-i18n="ui.homeTitle">Una mappa pratica per usare Codex lungo tutto il ciclo di vita UiPath</h2>
+            <p data-i18n="ui.homeIntro">
+              Scopri opportunità, parti da PDD e SDD, scegli il tipo di automazione, costruisci artefatti locali,
+              valida con il CLI, pubblica soluzioni, monitora esecuzioni e risolvi incidenti.
+            </p>
+          </div>
+          <div class="source-panel" aria-label="Fonte analisi">
+            <div class="version-strip" aria-label="Versione skill analizzate">
+              <span data-i18n="ui.skillVersion">Versione skill analizzate</span>
+              <strong id="skillsVersion">1.197.0</strong>
+              <small>Target CLI <code>^1.197.0</code> · commit <code>b997a0b1</code> · 26 giugno 2026</small>
+            </div>
+            <dl>
+              <div>
+                <dt data-i18n="ui.skillCount">Skill</dt>
+                <dd id="skillCount">21</dd>
+              </div>
+              <div>
+                <dt data-i18n="ui.commit">Commit</dt>
+                <dd>b997a0b1</dd>
+              </div>
+              <div>
+                <dt data-i18n="ui.localCli">CLI locale</dt>
+                <dd>uip 1.196.0</dd>
+              </div>
+            </dl>
+            <a class="source-link" href="https://github.com/UiPath/skills/tree/main/skills" data-i18n="ui.sourceRepo">Repository sorgente</a>
+            <p class="source-note" data-i18n="ui.sourceNote">Versione letta da <code>version-manifest.json</code>. Snapshot CLI repo: <code>1.197.0-alpha.20260623.7621</code>. Hash completo: <code>b997a0b12d9afb82aa4fe431c1ef7bc154d1c043</code>.</p>
+          </div>
+        </section>
+
+        <section class="lifecycle-band" aria-labelledby="lifecycleTitle">
+          <div class="band-heading">
+            <p class="eyebrow" data-i18n="ui.lifecycleEyebrow">Lifecycle</p>
+            <h2 id="lifecycleTitle" data-i18n="ui.lifecycleTitle">Dalla discovery all'operatività</h2>
+          </div>
+          <figure class="map-figure">
+            <img src="./assets/lifecycle-map.svg" alt="Mappa visuale del lifecycle UiPath da design a miglioramento continuo">
+          </figure>
+          <div class="lifecycle-grid" id="lifecycleGrid"></div>
+        </section>
+
+        <section class="detail-band" aria-labelledby="skillTitle">
+          <div class="detail-layout">
+            <article class="detail-main">
+              <div class="detail-head">
+                <div>
+                  <p class="eyebrow" id="skillCategory">Authoring</p>
+                  <h2 id="skillTitle">uipath-rpa</h2>
+                </div>
+                <div class="badges" id="skillBadges"></div>
+              </div>
+
+              <p id="skillPurpose" class="lead"></p>
+
+              <div class="section-block">
+                <h3 data-i18n="ui.when">Quando usarla</h3>
+                <p id="skillWhen"></p>
+              </div>
+
+              <div class="section-block">
+                <h3 data-i18n="ui.capabilities">Cosa può fare in concreto</h3>
+                <ul id="skillCapabilities" class="capability-list"></ul>
+              </div>
+
+              <div class="section-block">
+                <h3 data-i18n="ui.how">Come usarla con Codex</h3>
+                <ul id="skillHow" class="check-list"></ul>
+              </div>
+
+              <div class="section-block">
+                <h3 data-i18n="ui.subskills">Sub-skill invocate</h3>
+                <p id="skillSubskillIntro" class="subskill-intro"></p>
+                <div id="skillSubskills" class="subskill-grid"></div>
+              </div>
+
+              <div class="section-block">
+                <h3 data-i18n="ui.commands">Comandi e artefatti tipici</h3>
+                <div id="skillCli" class="command-grid"></div>
+              </div>
+            </article>
+
+            <aside class="detail-side" aria-label="Prompt e handoff">
+              <div class="side-block">
+                <h3 data-i18n="ui.prompt">Prompt efficace</h3>
+                <p id="skillPrompt" class="prompt-text"></p>
+              </div>
+              <div class="side-block">
+                <h3 data-i18n="ui.handoffs">Handoff naturali</h3>
+                <ul id="skillHandoffs" class="plain-list"></ul>
+              </div>
+              <div class="side-block">
+                <h3 data-i18n="ui.caveat">Attenzione</h3>
+                <p id="skillCaveat"></p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="guide-band" aria-labelledby="guideTitle">
+          <div class="band-heading">
+            <p class="eyebrow" data-i18n="ui.guideEyebrow">Consigli operativi</p>
+            <h2 id="guideTitle" data-i18n="ui.guideTitle">Come massimizzare Codex sulle skill UiPath</h2>
+          </div>
+          <div class="guide-grid" id="guideGrid"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+    <script src="./locales/languages.js"></script>
+    <script src="./i18n.js"></script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UiPath Skills Knowledge Graph</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body class="graph-page">
+    <main class="graph-shell">
+      <header class="graph-topbar site-header">
+        <a class="site-logo graph-brand" href="./index.html" aria-label="UiPath Skills Navigator">
+          <img class="site-logo-mark" src="./assets/uipath-glyph-square64px.png" alt="" aria-hidden="true">
+          <span class="site-logo-text">UiPath</span>
+          <span class="site-logo-section">Skills Knowledge Graph</span>
+        </a>
+        <nav class="graph-nav site-nav" aria-label="Navigazione sito">
+          <a href="./index.html" data-i18n="ui.navigator">Navigator</a>
+          <a href="./index.html#guideTitle" data-i18n="ui.developersNav" class="is-active">Developers</a>
+          <a href="https://github.com/UiPath/skills/tree/main/skills" data-i18n="ui.repo">Repository</a>
+        </nav>
+        <section class="language-panel graph-language header-language" data-language-selector aria-label="Selezione lingua"></section>
+      </header>
+
+      <section class="graph-intro" aria-labelledby="graphTitle">
+        <div>
+          <p class="eyebrow" data-i18n="ui.graphEyebrow">Relazioni tra skill</p>
+          <h1 id="graphTitle" data-i18n="ui.graphTitle">Grafo navigabile delle skill UiPath</h1>
+          <p data-i18n="ui.graphIntro">
+            Ogni nodo e una skill. Le linee mostrano gli handoff/sub-skill che Codex usa quando una competenza
+            deve delegare a un'altra. Passa il mouse su un nodo per leggere cosa fa la skill; trascina i nodi
+            per migliorare la leggibilita del grafo.
+          </p>
+        </div>
+        <div class="graph-version">
+          <span data-i18n="ui.graphVersion">Versione skill</span>
+          <strong>1.197.0</strong>
+          <small data-i18n="ui.graphMeta">21 nodi &middot; relazioni da handoff</small>
+        </div>
+      </section>
+
+      <section class="graph-tools" aria-label="Filtri grafo">
+        <label for="graphSearch">
+          <span data-i18n="ui.graphSearch">Cerca skill</span>
+          <input id="graphSearch" type="search" placeholder="platform, flow, agent..." autocomplete="off" data-i18n-placeholder="graphSearch">
+        </label>
+        <label for="graphPhase">
+          <span data-i18n="ui.graphPhase">Fase</span>
+          <select id="graphPhase">
+            <option value="all" data-i18n="ui.allPhases">Tutte le fasi</option>
+            <option value="design" data-i18n="ui.design">Design</option>
+            <option value="build" data-i18n="ui.build">Build</option>
+            <option value="integrate" data-i18n="ui.integrate">Integra</option>
+            <option value="deploy" data-i18n="ui.deploy">Deploy</option>
+            <option value="operate" data-i18n="ui.operate">Operate</option>
+          </select>
+        </label>
+        <button id="graphReset" class="graph-reset" type="button" data-i18n="ui.reset">Reset</button>
+        <p id="graphStats" class="graph-stats"></p>
+      </section>
+
+      <section class="graph-workspace">
+        <div class="graph-canvas" aria-label="Knowledge graph skill UiPath">
+          <svg id="skillGraph" role="img" aria-labelledby="graphTitle graphDescription"></svg>
+          <p id="graphDescription" class="sr-only">Grafo interattivo delle relazioni tra skill UiPath.</p>
+          <div id="graphTooltip" class="graph-tooltip" role="tooltip"></div>
+        </div>
+
+        <aside class="graph-inspector" aria-label="Dettaglio skill selezionata">
+          <p class="eyebrow" data-i18n="ui.selectedSkill">Skill selezionata</p>
+          <h2 id="graphSkillName">uipath-platform</h2>
+          <p id="graphSkillPurpose" class="graph-purpose"></p>
+          <dl class="graph-meta">
+            <div>
+              <dt data-i18n="ui.category">Categoria</dt>
+              <dd id="graphSkillCategory"></dd>
+            </div>
+            <div>
+              <dt data-i18n="ui.phase">Fase</dt>
+              <dd id="graphSkillPhase"></dd>
+            </div>
+            <div>
+              <dt data-i18n="ui.relations">Relazioni</dt>
+              <dd id="graphSkillDegree"></dd>
+            </div>
+          </dl>
+          <a id="graphOpenDetail" class="source-link" href="./index.html#uipath-platform" data-i18n="ui.openFullCard">Apri scheda completa</a>
+          <div class="side-block">
+            <h3 data-i18n="ui.invokes">Invoca</h3>
+            <div id="graphOutgoing" class="graph-link-list"></div>
+          </div>
+          <div class="side-block">
+            <h3 data-i18n="ui.invokedBy">Invocata da</h3>
+            <div id="graphIncoming" class="graph-link-list"></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="graph-legend" aria-label="Legenda grafo" data-i18n-aria="ui.legend">
+        <span><i class="legend-dot design"></i><span data-i18n="ui.design">Design</span></span>
+        <span><i class="legend-dot build"></i><span data-i18n="ui.build">Build</span></span>
+        <span><i class="legend-dot integrate"></i><span data-i18n="ui.integrate">Integra</span></span>
+        <span><i class="legend-dot deploy"></i><span data-i18n="ui.deploy">Deploy</span></span>
+        <span><i class="legend-dot operate"></i><span data-i18n="ui.operate">Operate</span></span>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+    <script src="./locales/languages.js"></script>
+    <script src="./i18n.js"></script>
+    <script src="./graph.js"></script>
+  </body>
+</html>
