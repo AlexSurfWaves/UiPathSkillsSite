@@ -30,7 +30,7 @@ window.uipathLocales.it = {
     skillCount: "Skill",
     commit: "Commit",
     localCli: "CLI locale",
-    sourceNote: "Versione letta da version-manifest.json. Snapshot CLI repo: 1.197.0-alpha.20260623.7621. Hash completo: b997a0b12d9afb82aa4fe431c1ef7bc154d1c043.",
+    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.198.0. Hash completo: 6e122c6cf81432d8b3d0b7bec1877018eb4a0ec7.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "Dalla discovery all'operatività",
     when: "Quando usarla",
@@ -47,7 +47,7 @@ window.uipathLocales.it = {
     graphTitle: "Grafo navigabile delle skill UiPath",
     graphIntro: "Ogni nodo è una skill. Le linee mostrano gli handoff/sub-skill che Codex usa quando una competenza deve delegare a un'altra. Passa il mouse su un nodo per leggere cosa fa la skill; trascina i nodi per migliorare la leggibilità del grafo.",
     graphVersion: "Versione skill",
-    graphMeta: "21 nodi · relazioni da handoff",
+    graphMeta: "22 nodi · relazioni da handoff",
     graphSearch: "Cerca skill",
     graphPhase: "Fase",
     reset: "Reset",
@@ -97,7 +97,7 @@ window.uipathLocales.it = {
     },
     integrate: {
       title: "3. Integra",
-      text: "Human tasks, IXP, Data Fabric via Platform, connector e MCP."
+      text: "Human tasks, IXP, Data Fabric via Platform, connector builder e MCP."
     },
     deploy: {
       title: "4. Deploy",

@@ -30,7 +30,7 @@ window.uipathLocales.en = {
     skillCount: "Skills",
     commit: "Commit",
     localCli: "Local CLI",
-    sourceNote: "Version read from version-manifest.json. Repository CLI snapshot: 1.197.0-alpha.20260623.7621. Full hash: b997a0b12d9afb82aa4fe431c1ef7bc154d1c043.",
+    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.198.0. Full hash: 6e122c6cf81432d8b3d0b7bec1877018eb4a0ec7.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "From discovery to operations",
     when: "When to use it",
@@ -47,7 +47,7 @@ window.uipathLocales.en = {
     graphTitle: "Navigable graph of UiPath skills",
     graphIntro: "Each node is a skill. Lines show the handoffs and sub-skills Codex uses when one capability needs to delegate to another. Hover a node to read what the skill does; drag nodes to improve graph readability.",
     graphVersion: "Skills version",
-    graphMeta: "21 nodes · handoff relationships",
+    graphMeta: "22 nodes · handoff relationships",
     graphSearch: "Search skills",
     graphPhase: "Phase",
     reset: "Reset",
@@ -97,7 +97,7 @@ window.uipathLocales.en = {
     },
     integrate: {
       title: "3. Integrate",
-      text: "Human tasks, IXP, Data Fabric through Platform, connectors, and MCP."
+      text: "Human tasks, IXP, Data Fabric through Platform, connector builder, and MCP."
     },
     deploy: {
       title: "4. Deploy",
@@ -319,6 +319,27 @@ window.uipathLocales.en = {
         "Uses the `@uipath/uipath-typescript` SDK for Orchestrator, Data Fabric, Maestro, Action Center, feedback, and pagination.",
         "Runs local debug, build, pack, publish, and deploy with `uip codedapp`.",
         "Supports OAuth scopes, client setup, file sync, and patterns for apps with document tabs or complex forms."
+      ]
+    },
+    "uipath-connector-builder": {
+      category: "Integration",
+      product: "Integration Service Connector Builder",
+      purpose: "Creates and edits custom UiPath Integration Service connectors for JSON REST APIs, including auth, activities, triggers, JavaScript hooks, validation, import, and publish.",
+      when: "Use it when you need to build or update an Integration Service connector on disk, not when you only need to use an already-published connection or activity.",
+      how: [
+        "Always run `builder inspect` before editing an existing connector.",
+        "Configure authentication with `auth set`, create activities and fields with builder commands, then validate errors and warnings.",
+        "After validation, import and publish only when tenant, login, and version bump are correct."
+      ],
+      prompt: "Create an Integration Service connector for this JSON REST API: configure auth, typed activities, request/response fields, validate it, then stop before publishing.",
+      caveat: "It does not operate already-published connectors: use `uipath-platform` for connections, discovery, and runtime use; use `uipath-maestro-flow` for connector nodes inside `.flow`.",
+      capabilities: [
+        "Scaffolds or updates `periodic-*` connector repositories with `element.json`, `element-metadata.json`, standard resources, and JavaScript hooks.",
+        "Configures 14 authentication types through `auth set`, including OAuth2, PKCE, client credentials, API key, basic, JWT, and AWS v4.",
+        "Creates Integration Service activities with methods, paths, parameters, typed request/response fields, and Studio Web curation.",
+        "Adds polling or webhook triggers, system resources, pre/post request hooks, and configuration for host, region, and per-connection values.",
+        "Runs `inspect` and `validate`, treats warnings as real release gaps, and prepares import/publish with version bumps when needed.",
+        "Hands off to `uipath-platform` for published connector use and to `uipath-maestro-flow` for connector nodes inside a Flow."
       ]
     },
     "uipath-human-in-the-loop": {

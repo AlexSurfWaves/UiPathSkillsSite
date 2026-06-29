@@ -18,7 +18,7 @@ const skills = [
     ],
     cli: ["references/intake-guide.md", "references/mining-guide.md", "references/report-template.md"],
     prompt: "Analizza questi materiali operativi e produci un report prioritizzato di opportunità di automazione UiPath, con tier, impatto, effort e skill consigliate.",
-    handoffs: ["uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-agents", "uipath-platform"],
+    handoffs: ["uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-agents", "uipath-human-in-the-loop", "uipath-platform"],
     caveat: "Non costruisce automazioni: trasforma segnali organizzativi in una pipeline di opportunità realistica e prioritizzata."
   },
   {
@@ -38,7 +38,7 @@ const skills = [
     ],
     cli: ["assets/templates/*-sdd-template.md", "references/product-selection-guide.md", "references/sdd-generation-guide.md", "references/plan-and-tasks-format.md"],
     prompt: "Leggi `pdd.md`, crea o aggiorna `sdd.md`, poi genera un piano di implementazione multi-skill con stop condition e validazioni.",
-    handoffs: ["uipath-review", "uipath-solution", "uipath-rpa", "uipath-maestro-flow", "uipath-agents"],
+    handoffs: ["uipath-review", "uipath-solution", "uipath-platform", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-maestro-case", "uipath-agents"],
     caveat: "`uipath-design` non è più una skill separata nel catalogo aggiornato: per design e planning usa `uipath-planner`."
   },
   {
@@ -58,7 +58,7 @@ const skills = [
     ],
     cli: ["uip rpa init", "uip rpa validate", "uip rpa build", "uip rpa debug start", "uip rpa packages install"],
     prompt: "Nel progetto RPA aperto, aggiungi un workflow XAML per processare una queue, valida il file e poi compila l'intero progetto.",
-    handoffs: ["uipath-platform", "uipath-test", "uipath-solution", "uipath-troubleshoot"],
+    handoffs: ["uipath-platform", "uipath-test", "uipath-solution", "uipath-agents", "uipath-maestro-flow", "uipath-troubleshoot"],
     caveat: "Per `debug` e `run` ci possono essere effetti reali su app, email, code o API: chiedi sempre a Codex di distinguere validate/build da esecuzione."
   },
   {
@@ -78,7 +78,7 @@ const skills = [
     ],
     cli: ["uip solution init", "uip maestro flow init", "uip maestro flow registry search", "uip maestro flow validate", "uip maestro flow eval"],
     prompt: "Crea un Flow in una soluzione UiPath che riceve un trigger, legge dati da un connector, invoca un agente e produce un output validato.",
-    handoffs: ["uipath-agents", "uipath-human-in-the-loop", "uipath-ixp", "uipath-platform", "uipath-solution"],
+    handoffs: ["uipath-agents", "uipath-human-in-the-loop", "uipath-ixp", "uipath-rpa", "uipath-platform", "uipath-solution", "uipath-connector-builder"],
     caveat: "La skill distingue nodi editabili a mano e nodi posseduti dal CLI. Per i connector lascia configurare a `uip maestro flow node add/configure`."
   },
   {
@@ -118,7 +118,7 @@ const skills = [
     ],
     cli: ["uip maestro case validate", "caseplan.json", "tasks.md", "bindings_v2.json"],
     prompt: "Dal SDD crea un piano Case Management con fasi, task, variabili e regole, poi valida `caseplan.json`.",
-    handoffs: ["uipath-planner", "uipath-human-in-the-loop", "uipath-maestro-flow", "uipath-solution"],
+    handoffs: ["uipath-planner", "uipath-maestro-bpmn", "uipath-rpa", "uipath-human-in-the-loop", "uipath-maestro-flow", "uipath-solution"],
     caveat: "Non usarla per BPMN o Flow generici: è centrata su `caseplan.json`."
   },
   {
@@ -158,7 +158,7 @@ const skills = [
     ],
     cli: ["uip api-workflow validate", "uip api-workflow run", "uip api-workflow registry resolve", "uip solution pack", "uip solution publish"],
     prompt: "Crea un API Workflow che chiama un endpoint REST, normalizza la risposta con JavaScript e ritorna un payload validato.",
-    handoffs: ["uipath-platform", "uipath-solution", "uipath-maestro-flow", "uipath-agents"],
+    handoffs: ["uipath-platform", "uipath-solution", "uipath-maestro-flow", "uipath-agents", "uipath-rpa", "uipath-coded-apps"],
     caveat: "È preview/in sviluppo: tieni i file piccoli, valida spesso e separa run senza auth da run con effetti reali."
   },
   {
@@ -178,8 +178,28 @@ const skills = [
     ],
     cli: ["uip codedapp create", "uip codedapp build", "uip codedapp debug", "uip codedapp pack", "uip codedapp deploy"],
     prompt: "Crea una Coded Action App per approvare una richiesta, con schema input/output e chiamata SDK a Orchestrator.",
-    handoffs: ["uipath-human-in-the-loop", "uipath-tasks", "uipath-platform", "uipath-solution"],
+    handoffs: ["uipath-human-in-the-loop", "uipath-tasks", "uipath-platform", "uipath-solution", "uipath-agents", "uipath-rpa"],
     caveat: "Per workflow `.cs` o `.xaml` non usare questa skill: passa a `uipath-rpa`."
+  },
+  {
+    id: "uipath-connector-builder",
+    name: "uipath-connector-builder",
+    category: "Integration",
+    phase: "integrate",
+    status: "in-development",
+    product: "Integration Service Connector Builder",
+    files: "element.json, element-metadata.json, standard-resources/*.json, hooks/*.js, periodic-* connector repos",
+    purpose: "Crea e modifica connector custom di UiPath Integration Service per API REST JSON, con auth, attivita, trigger, hook JavaScript, validate, import e publish.",
+    when: "Usala quando devi costruire o aggiornare un connector Integration Service su disco, non quando devi semplicemente usare una connection o un'attivita gia pubblicata.",
+    how: [
+      "Esegui sempre `builder inspect` prima di modificare un connector esistente.",
+      "Configura l'autenticazione con `auth set`, crea attivita e campi con i comandi builder, poi valida warning inclusi.",
+      "Dopo la validazione, usa import e publish solo quando tenant, login e version bump sono corretti."
+    ],
+    cli: ["uip is connectors builder init", "uip is connectors builder inspect", "uip is connectors builder activity create", "uip is connectors builder activity field create", "uip is connectors builder validate", "uip is connectors import", "uip is connectors publish"],
+    prompt: "Crea un connector Integration Service per questa API REST JSON: configura auth, attivita tipizzate, campi request/response, validate, poi fermati prima del publish.",
+    handoffs: ["uipath-platform", "uipath-maestro-flow"],
+    caveat: "Non gestisce l'uso operativo di connector gia pubblicati: per connection, discovery e run usa `uipath-platform`; per nodi connector dentro `.flow` usa `uipath-maestro-flow`."
   },
   {
     id: "uipath-human-in-the-loop",
@@ -259,7 +279,7 @@ const skills = [
     ],
     cli: ["uip login status", "uip or folders list", "uip or assets create", "uip df entities list", "uip df records query", "uip is connections list", "uip traces spans get"],
     prompt: "Verifica login e tenant, trova la folder corretta, lista risorse Orchestrator e Data Fabric necessarie e restituisci i riferimenti da usare nel workflow.",
-    handoffs: ["uipath-solution", "uipath-rpa", "uipath-maestro-flow", "uipath-agents", "uipath-troubleshoot"],
+    handoffs: ["uipath-solution", "uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-agents", "uipath-test", "uipath-connector-builder", "uipath-troubleshoot"],
     caveat: "Il REST diretto è fallback. Nella maggioranza dei casi il CLI gestisce header, paginazione, tenant e shape di output meglio del codice custom."
   },
   {
@@ -279,7 +299,7 @@ const skills = [
     ],
     cli: ["uip admin identity", "uip admin authz", "uip admin oms", "uip admin ip-restriction", "uip admin audit"],
     prompt: "Elenca i gruppi e le assegnazioni ruolo rilevanti per questo tenant, poi proponi la modifica minima senza applicarla.",
-    handoffs: ["uipath-platform", "uipath-governance", "uipath-troubleshoot"],
+    handoffs: ["uipath-platform", "uipath-rpa", "uipath-governance", "uipath-troubleshoot"],
     caveat: "Sono operazioni sensibili: privilegia read-only, conferme esplicite e output auditabile."
   },
   {
@@ -339,7 +359,7 @@ const skills = [
     ],
     cli: ["uip solution init", "uip solution project add", "uip solution resource refresh", "uip solution pack", "uip solution publish", "uip solution deploy run"],
     prompt: "Prepara questa soluzione UiPath per il deploy: verifica progetti inclusi, refresh risorse, pack e dimmi il comando di publish/deploy.",
-    handoffs: ["uipath-platform", "uipath-review", "uipath-troubleshoot"],
+    handoffs: ["uipath-platform", "uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-agents", "uipath-coded-apps", "uipath-review", "uipath-troubleshoot"],
     caveat: "Non corregge automaticamente i workflow: se validate/build falliscono, torna alla skill di prodotto."
   },
   {
@@ -490,6 +510,14 @@ const capabilityDetails = {
     "Esegue debug locale, build, pack, publish e deploy con `uip codedapp`.",
     "Supporta OAuth scopes, client setup, file sync e pattern per app con document tab o form complessi."
   ],
+  "uipath-connector-builder": [
+    "Scaffolda o aggiorna repository connector `periodic-*` con `element.json`, `element-metadata.json`, standard resources e hook JavaScript.",
+    "Configura 14 tipi di autenticazione con `auth set`, inclusi OAuth2, PKCE, client credentials, API key, basic, JWT e AWS v4.",
+    "Crea attivita Integration Service con metodi, path, parametri, campi request/response tipizzati e curatela Studio Web.",
+    "Aggiunge trigger polling o webhook, system resources, hook pre/post request e configurazioni per host, region e valori per-connection.",
+    "Esegue `inspect` e `validate`, tratta i warning come gap da risolvere e prepara import/publish con version bump quando serve.",
+    "Passa a `uipath-platform` per usare connector pubblicati e a `uipath-maestro-flow` per nodi connector dentro un Flow."
+  ],
   "uipath-human-in-the-loop": [
     "Disegna approval gate, validation checkpoint, escalation, write-back e enrichment umano dentro Flow, Maestro o agenti.",
     "Rileva la surface corretta: `.flow`, low-code agent, coded agent, BPMN o Coded Action App.",
@@ -594,8 +622,8 @@ const lifecycle = [
   {
     key: "integrate",
     title: "3. Integra",
-    text: "Human tasks, IXP, Data Fabric via Platform, connector e MCP.",
-    skills: ["uipath-human-in-the-loop", "uipath-ixp", "uipath-platform", "uipath-mcp-servers"]
+    text: "Human tasks, IXP, Data Fabric via Platform, connector builder e MCP.",
+    skills: ["uipath-human-in-the-loop", "uipath-ixp", "uipath-connector-builder", "uipath-platform", "uipath-mcp-servers"]
   },
   {
     key: "deploy",
