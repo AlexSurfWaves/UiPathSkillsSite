@@ -47,16 +47,16 @@ const skills = [
     category: "Authoring",
     phase: "build",
     status: "preview",
-    product: "Studio, RPA, Coded Workflows",
+    product: "Studio, RPA, Coded Workflows, UI Automation",
     files: ".xaml, .cs, project.json",
-    purpose: "Crea, modifica, valida, compila, esegue e testa automazioni RPA moderne in XAML o C# coded workflow.",
-    when: "Usala per workflow RPA, UI automation, Excel, email, file, code fallback, Integration Service da RPA, test case e correzione errori XAML/C#.",
+    purpose: "Crea, modifica, valida, compila, esegue e testa automazioni RPA moderne in XAML o C# coded workflow, con discovery di progetto e regole UIA piu esplicite.",
+    when: "Usala per workflow RPA, UI automation, Excel, email, file, code fallback, Integration Service da RPA, test case, error handling e correzione errori XAML/C#.",
     how: [
       "Apri Codex nella root che contiene `project.json`, così può rilevare framework, dipendenze e workflow.",
       "Lascia che Codex usi `uip rpa validate` per file e `uip rpa build` a livello progetto prima di dichiarare completato.",
       "Per UI automation, fai usare Object Repository e target capture UiPath; evita scorciatoie con Playwright, Selenium o DOM."
     ],
-    cli: ["uip rpa init", "uip rpa validate", "uip rpa build", "uip rpa debug start", "uip rpa packages install"],
+    cli: ["uip rpa init", "uip rpa validate", "uip rpa build", "uip rpa debug start", "agents/uipath-project-discovery-agent.md"],
     prompt: "Nel progetto RPA aperto, aggiungi un workflow XAML per processare una queue, valida il file e poi compila l'intero progetto.",
     handoffs: ["uipath-platform", "uipath-test", "uipath-solution", "uipath-agents", "uipath-maestro-flow", "uipath-troubleshoot"],
     caveat: "Per `debug` e `run` ci possono essere effetti reali su app, email, code o API: chiedi sempre a Codex di distinguere validate/build da esecuzione."
@@ -109,11 +109,12 @@ const skills = [
     status: "in-development",
     product: "Case Management",
     files: "caseplan.json",
-    purpose: "Crea Case Management plan a partire da SDD o da un'intervista leggera, con task, fasi, regole e validazione.",
+    purpose: "Crea Case Management plan a partire da SDD o da un'intervista leggera, e modifica caseplan esistenti con operazioni brownfield mirate.",
     when: "Usala per soluzioni case-centric, dove il lavoro evolve per stati, attività umane, regole e dati associati al caso.",
     how: [
       "Parti da `sdd.md` quando esiste; altrimenti fai raccogliere a Codex le informazioni minime.",
-      "Fai generare `tasks.md` e poi `caseplan.json` con recipe JSON dedicate.",
+      "Per greenfield fai generare `tasks.md` e poi `caseplan.json` con recipe JSON dedicate.",
+      "Per brownfield usa edit mirati e pull dello stato server quando il case esiste gia in Studio Web.",
       "Valida e pubblica solo dopo aver verificato fasi, ruoli, variabili e binding."
     ],
     cli: ["uip maestro case validate", "caseplan.json", "tasks.md", "bindings_v2.json"],
@@ -167,19 +168,40 @@ const skills = [
     category: "Authoring",
     phase: "build",
     status: "preview",
-    product: "Coded Apps, Action Apps",
-    files: "app.config.json, action-schema.json, TypeScript",
-    purpose: "Scaffold, build, debug e deploy di Coded Web Apps e Coded Action Apps con SDK TypeScript UiPath.",
-    when: "Usala per app.config, action schema, interfacce utente custom, app per Action Center e integrazioni con Orchestrator, Data Fabric o Maestro.",
+    product: "Coded Apps, Action Apps, dashboards",
+    files: "app.config.json, action-schema.json, TypeScript, dashboard assets",
+    purpose: "Scaffold, build, debug e deploy di Coded Web Apps, Coded Action Apps e dashboard analytics/governance generate da richiesta naturale.",
+    when: "Usala per app.config, action schema, interfacce custom, Action Center, SDK UiPath e dashboard su agent health, KPI, error rate, governance o consumption trends.",
     how: [
       "Fai installare/verificare tool `codedapp` e dipendenze TypeScript prima del build.",
       "Per Action App, definisci prima `action-schema.json` e mapping di input/output.",
+      "Per dashboard, risolvi metriche, scope OAuth e sorgenti Insights/RTM prima di build e deploy.",
       "Usa preview/debug locale, poi pack/publish/deploy quando la UI è verificata."
     ],
-    cli: ["uip codedapp create", "uip codedapp build", "uip codedapp debug", "uip codedapp pack", "uip codedapp deploy"],
-    prompt: "Crea una Coded Action App per approvare una richiesta, con schema input/output e chiamata SDK a Orchestrator.",
-    handoffs: ["uipath-human-in-the-loop", "uipath-tasks", "uipath-platform", "uipath-solution", "uipath-agents", "uipath-rpa"],
+    cli: ["uip codedapp create", "uip codedapp build", "uip codedapp debug", "uip codedapp pack", "references/dashboards/CAPABILITY.md"],
+    prompt: "Crea una Coded Action App o un dashboard operativo UiPath, con schema/scope corretti, SDK UiPath e build verificata.",
+    handoffs: ["uipath-human-in-the-loop", "uipath-tasks", "uipath-functions", "uipath-platform", "uipath-solution", "uipath-agents", "uipath-rpa"],
     caveat: "Per workflow `.cs` o `.xaml` non usare questa skill: passa a `uipath-rpa`."
+  },
+  {
+    id: "uipath-functions",
+    name: "uipath-functions",
+    category: "Authoring",
+    phase: "build",
+    status: "preview",
+    product: "Coded Functions, Python",
+    files: "uipath.json, entry-points.json, pyproject.toml, .py",
+    purpose: "Crea unita deterministiche di business logic Python pacchettizzate come artefatti UiPath, con input/output tipizzati e job semantics.",
+    when: "Usala quando serve logica custom, integrazione ERP/API, trasformazione dati o chiamate SDK UiPath senza ragionamento LLM o loop agentico.",
+    how: [
+      "Scaffolda con `uip functions new <name> --language py` e registra gli entry point nel map `functions` di `uipath.json`.",
+      "Definisci schema Input/Output tipizzato, inizializza `UiPath()` in modo lazy e ritorna errori come campi output invece di far propagare eccezioni.",
+      "Esegui `uip functions init` prima di pack, publish o push quando cambiano schema o entry point."
+    ],
+    cli: ["uip functions new --language py", "uip functions init", "uip functions run", "uip functions pack", "uip functions publish", "uip functions push"],
+    prompt: "Crea una Python Coded Function UiPath con input/output Pydantic, logica deterministica, init lazy del SDK, `uipath.json` aggiornato e `uip functions init` pronto per pack.",
+    handoffs: ["uipath-platform", "uipath-maestro-flow", "uipath-agents", "uipath-solution", "uipath-troubleshoot"],
+    caveat: "Non e una skill per agenti LLM: se servono reasoning, routing o framework LangGraph/LlamaIndex/OpenAI Agents passa a `uipath-agents`."
   },
   {
     id: "uipath-connector-builder",
@@ -308,17 +330,17 @@ const skills = [
     category: "Platform",
     phase: "operate",
     status: "in-development",
-    product: "Governance, AOps, ToolUsePolicy",
-    files: "policy definitions",
-    purpose: "Autore e deploy di policy governance: AOps product policies e Access ToolUsePolicy per invocazioni tool-to-tool.",
-    when: "Usala quando devi limitare, bloccare o imporre comportamenti in Studio, Assistant, Robot, AI Trust Layer, Agent Builder o tool invocation.",
+    product: "Governance, AOps, ToolUsePolicy, compliance standards",
+    files: "policy definitions, compliance-pack state",
+    purpose: "Autore, deploy e diagnosi di policy governance: AOps product policies, Access ToolUsePolicy e compliance standards come ISO 42001.",
+    when: "Usala quando devi limitare, bloccare, imporre comportamenti o controllare/applicare posture compliance in Studio, Assistant, Robot, AI Trust Layer, Agent Builder o tool invocation.",
     how: [
-      "Classifica prima se serve policy prodotto o policy accesso tool.",
+      "Classifica prima se serve policy prodotto, policy accesso tool o compliance standard.",
       "Fai scoprire target, utenti/gruppi e risorse prima di applicare deploy.",
-      "Usa esempi e reference specifiche per evitare policy troppo ampia."
+      "Per compliance pack fai posture analysis, mostra piano e richiedi conferma prima di applicare setting."
     ],
-    cli: ["uip gov aops-policy", "uip gov access-policy", "uip gov deploy", "uip gov list"],
-    prompt: "Crea una bozza di governance policy che impedisca agli agenti di invocare workflow non taggati `approved`, senza deploy automatico.",
+    cli: ["uip gov aops-policy", "uip gov access-policy", "uip gov compliance-packs", "uip gov deployed-policy"],
+    prompt: "Crea una bozza di governance policy o analizza la posture ISO 42001, senza applicare cambiamenti finche il piano non e confermato.",
     handoffs: ["uipath-admin", "uipath-platform", "uipath-agents"],
     caveat: "Non usarla per normali permessi Orchestrator: quella è piattaforma/admin."
   },
@@ -462,8 +484,10 @@ const capabilityDetails = {
   "uipath-rpa": [
     "Crea nuovi progetti RPA moderni con `uip rpa init`, scegliendo target framework, expression language e template appropriato.",
     "Modifica workflow XAML, coded workflow C#, test case e file di progetto senza rompere `entryPoints` e `fileInfoCollection`.",
+    "Aggiorna project context tramite discovery agent quando `.claude/rules/project-context.md` manca o diventa stale.",
     "Scopre e installa activity package, legge documentazione `.local/docs` e genera activity XAML partendo da default sicuri.",
     "Gestisce UI automation con Object Repository, target capture, selector placeholders e workflow multi-schermo.",
+    "Centralizza error-handling, UIA-only boundaries e placeholder selector pattern per evitare stub che validano ma non automatizzano.",
     "Valida per file, compila a livello progetto, esegue debug/run con disciplina sugli effetti reali e produce output di completamento verificabile.",
     "Supporta pattern enterprise come REFramework, queue processing, trigger, library authoring, long-running workflow e coded fallback."
   ],
@@ -484,6 +508,7 @@ const capabilityDetails = {
   ],
   "uipath-maestro-case": [
     "Crea `caseplan.json` da SDD o tramite intervista minima quando il design non esiste.",
+    "Modifica caseplan esistenti con percorso brownfield mirato, senza rigenerare l'intero piano quando serve solo un edit.",
     "Modella case, stage, task, condizioni di ingresso/uscita, SLA, variabili globali e IO binding.",
     "Produce `tasks.md` e lavora per fasi: interview, planning, prototyping, implementation, validate, debug, publish.",
     "Usa recipe JSON per plugin specifici invece di inventare manualmente strutture di case plan.",
@@ -505,10 +530,19 @@ const capabilityDetails = {
   ],
   "uipath-coded-apps": [
     "Scaffolda Coded Web Apps e Coded Action Apps con config, schema azione e template TypeScript/CSS.",
+    "Genera dashboard analytics, observability e governance da richiesta naturale, con metriche agent health, KPI, error rate e consumption trends.",
     "Valida `action-schema.json`, gestisce input/output di Action Center e genera UI per approvazione o data entry.",
-    "Usa SDK `@uipath/uipath-typescript` per Orchestrator, Data Fabric, Maestro, Action Center, feedback e pagination.",
+    "Usa SDK `@uipath/uipath-typescript` per Orchestrator, Data Fabric, Maestro, Action Center, agenti, governance, traces, feedback e pagination.",
+    "Gestisce OAuth scopes e Insights/RTM per dashboard prima di build, deploy o runtime SDK calls.",
     "Esegue debug locale, build, pack, publish e deploy con `uip codedapp`.",
     "Supporta OAuth scopes, client setup, file sync e pattern per app con document tab o form complessi."
+  ],
+  "uipath-functions": [
+    "Scaffolda Python Coded Functions con `uip functions new --language py` e genera metadati con `uip functions init`.",
+    "Definisce input/output tipizzati con Pydantic, dataclass o classi annotate e registra gli entry point nel map `functions` di `uipath.json`.",
+    "Implementa logica deterministica senza chiamate LLM, con `UiPath()` inizializzato lazy e tracing sull'entry point.",
+    "Usa SDK UiPath per assets, buckets, queues, attachments e Integration Service connections quando serve accesso platform.",
+    "Esegue run locale, pack, publish e push, separando Python job semantics da funzioni JS/TS HTTP per Coded Apps."
   ],
   "uipath-connector-builder": [
     "Scaffolda o aggiorna repository connector `periodic-*` con `element.json`, `element-metadata.json`, standard resources e hook JavaScript.",
@@ -520,7 +554,7 @@ const capabilityDetails = {
   ],
   "uipath-human-in-the-loop": [
     "Disegna approval gate, validation checkpoint, escalation, write-back e enrichment umano dentro Flow, Maestro o agenti.",
-    "Rileva la surface corretta: `.flow`, low-code agent, coded agent, BPMN o Coded Action App.",
+    "Rileva la surface corretta: `.flow`, low-code agent, Maestro BPMN o Coded Action App; per coded agent passa a `uipath-agents`.",
     "Sceglie task type tra QuickForm, Coded Action App, deployed AppTask ed escalation agentica.",
     "Definisce schema input/output, outcome, campi obbligatori, label, mapping e rami successivi.",
     "Scrive direttamente i nodi HITL appropriati e segnala cosa resta da configurare lato app/task."
@@ -557,9 +591,10 @@ const capabilityDetails = {
   ],
   "uipath-governance": [
     "Crea policy AOps per bloccare, limitare o imporre feature in Studio, StudioX, Assistant, Robot, AI Trust Layer e Agent Builder.",
+    "Analizza e applica compliance standards come ISO 42001 con posture analysis, piano e conferma esplicita.",
     "Crea Access ToolUsePolicy per controllare quando un workflow può invocarne un altro come tool.",
     "Filtra policy per tag, caller, actor, user o group, distinguendo layer prodotto e layer tool-use.",
-    "Guida deploy, gestione, campionatura e verifica delle policy.",
+    "Guida deploy, gestione, campionatura, effective-policy query e verifica delle policy.",
     "Aiuta a evitare regole troppo ampie tramite domanda di disambiguazione e planning dedicato."
   ],
   "uipath-mcp-servers": [
@@ -616,8 +651,8 @@ const lifecycle = [
   {
     key: "build",
     title: "2. Build",
-    text: "Artefatti locali: RPA, Flow, BPMN, Case, Agent, API e App.",
-    skills: ["uipath-rpa", "uipath-maestro-flow", "uipath-agents", "uipath-api-workflow"]
+    text: "Artefatti locali: RPA, Flow, BPMN, Case, Agent, API, App e Functions.",
+    skills: ["uipath-rpa", "uipath-maestro-flow", "uipath-agents", "uipath-api-workflow", "uipath-functions"]
   },
   {
     key: "integrate",

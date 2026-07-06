@@ -30,7 +30,7 @@ window.uipathLocales.it = {
     skillCount: "Skill",
     commit: "Commit",
     localCli: "CLI locale",
-    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.198.0. Hash completo: 6e122c6cf81432d8b3d0b7bec1877018eb4a0ec7.",
+    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.198.0. Hash completo: b224d4716a7f40bff400832638bc28adfe36580f.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "Dalla discovery all'operatività",
     when: "Quando usarla",
@@ -47,7 +47,7 @@ window.uipathLocales.it = {
     graphTitle: "Grafo navigabile delle skill UiPath",
     graphIntro: "Ogni nodo è una skill. Le linee mostrano gli handoff/sub-skill che Codex usa quando una competenza deve delegare a un'altra. Passa il mouse su un nodo per leggere cosa fa la skill; trascina i nodi per migliorare la leggibilità del grafo.",
     graphVersion: "Versione skill",
-    graphMeta: "22 nodi · relazioni da handoff",
+    graphMeta: "23 nodi · relazioni da handoff",
     graphSearch: "Cerca skill",
     graphPhase: "Fase",
     reset: "Reset",
@@ -93,7 +93,7 @@ window.uipathLocales.it = {
     },
     build: {
       title: "2. Build",
-      text: "Artefatti locali: RPA, Flow, BPMN, Case, Agent, API e App."
+      text: "Artefatti locali: RPA, Flow, BPMN, Case, Agent, API, App e Functions."
     },
     integrate: {
       title: "3. Integra",
