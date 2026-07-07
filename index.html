@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>UiPath Skills Navigator per Codex</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css?v=install-copy">
   </head>
   <body>
     <header class="site-header">
@@ -52,7 +52,7 @@
           <div class="intro">
             <p class="eyebrow" data-i18n="ui.catalogEyebrow">Catalogo analizzato dal repository UiPath/skills</p>
             <h2 data-i18n="ui.homeTitle">Una mappa pratica per usare Codex lungo tutto il ciclo di vita UiPath</h2>
-            <p data-i18n="ui.homeIntro">
+            <p class="intro-copy" data-i18n="ui.homeIntro">
               Scopri opportunità, parti da PDD e SDD, scegli il tipo di automazione, costruisci artefatti locali,
               valida con il CLI, pubblica soluzioni, monitora esecuzioni e risolvi incidenti.
             </p>
@@ -79,6 +79,17 @@
             </dl>
             <a class="source-link" href="https://github.com/UiPath/skills/tree/main/skills" data-i18n="ui.sourceRepo">Repository sorgente</a>
             <p class="source-note" data-i18n="ui.sourceNote">Versione letta da <code>version-manifest.json</code>. Snapshot repository: <code>1.198.0</code>. Schema manifest: <code>2</code>. Hash completo: <code>f6f621cb9379e4aa52bc2e470191f5d2169507e4</code>.</p>
+          </div>
+          <div class="install-callout" aria-labelledby="installCommandTitle">
+            <p id="installCommandTitle" class="install-label" data-i18n="ui.installCommandLabel">Installazione PowerShell</p>
+            <p class="install-description" data-i18n="ui.installCommandIntro">Esegui questo comando in PowerShell per installare uip CLI e skills UiPath.</p>
+            <div class="install-command-row">
+              <code id="installCommand" class="install-command">irm https://download.uipath.com/uipath-cli/install.ps1 | iex</code>
+              <button class="copy-command-button" type="button" data-copy-install-command data-copy-target="installCommand" data-i18n-aria="ui.copyInstallCommand" data-i18n-title="ui.copyInstallCommand" aria-label="Copia comando" title="Copia comando">
+                <span class="copy-icon" aria-hidden="true"></span>
+                <span class="visually-hidden" data-i18n="ui.copyInstallCommand">Copia comando</span>
+              </button>
+            </div>
           </div>
         </section>
 
@@ -160,8 +171,8 @@
       </main>
     </div>
 
-    <script src="./app.js"></script>
+    <script src="./app.js?v=install-copy"></script>
     <script src="./locales/languages.js"></script>
-    <script src="./i18n.js"></script>
+    <script src="./i18n.js?v=install-copy"></script>
   </body>
 </html>

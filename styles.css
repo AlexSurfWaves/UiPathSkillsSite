@@ -254,7 +254,7 @@ h3 {
   display: block;
   margin-bottom: 16px;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 
@@ -413,13 +413,143 @@ h3 {
   margin-bottom: 24px;
 }
 
-.intro p:last-child {
+.intro-copy {
   max-width: 850px;
   margin-bottom: 0;
   color: #111820;
   font-size: 1.35rem;
   line-height: 1.42;
   font-weight: 650;
+}
+
+.install-callout {
+  grid-column: 1 / -1;
+  max-width: none;
+  margin-top: 0;
+  border-left: 4px solid var(--orange);
+  padding: 12px 16px;
+  background: #f7f9fa;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.45fr) minmax(420px, 1fr);
+  gap: 6px 18px;
+  align-items: center;
+}
+
+.install-label {
+  margin: 0 0 4px;
+  color: #9d310b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.install-description {
+  margin: 0;
+  color: #26343d;
+  font-weight: 700;
+}
+
+.install-command {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #111820;
+  padding: 11px 12px;
+  background: #111820;
+  color: #ffffff;
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  white-space: nowrap;
+  word-break: break-word;
+}
+
+.install-command-row {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 46px;
+  gap: 8px;
+  align-items: start;
+}
+
+.copy-command-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 46px;
+  border: 1px solid #111820;
+  border-radius: 0;
+  background: #ffffff;
+  color: #111820;
+  cursor: pointer;
+}
+
+.copy-command-button:hover,
+.copy-command-button:focus {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.copy-command-button:focus {
+  outline: 3px solid rgba(255, 90, 31, 0.22);
+  outline-offset: 2px;
+}
+
+.copy-icon {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 20px;
+}
+
+.copy-icon::before,
+.copy-icon::after {
+  content: "";
+  position: absolute;
+  border: 2px solid currentColor;
+  background: transparent;
+}
+
+.copy-icon::before {
+  width: 10px;
+  height: 12px;
+  left: 2px;
+  top: 0;
+}
+
+.copy-icon::after {
+  width: 10px;
+  height: 12px;
+  left: 6px;
+  top: 5px;
+  background: #ffffff;
+}
+
+.copy-command-button.is-copied .copy-icon::before {
+  display: none;
+}
+
+.copy-command-button.is-copied .copy-icon::after {
+  width: 15px;
+  height: 8px;
+  left: 1px;
+  top: 4px;
+  border-width: 0 0 3px 3px;
+  background: transparent;
+  transform: rotate(-45deg);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .source-panel {
@@ -1460,8 +1590,22 @@ h3 {
     font-size: 2.2rem;
   }
 
-  .intro p:last-child {
+  .intro-copy {
     font-size: 1.08rem;
+  }
+
+  .install-callout {
+    grid-template-columns: 1fr;
+  }
+
+  .install-command-row {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .install-command {
+    font-size: 0.86rem;
+    white-space: normal;
   }
 
   .skill-list,

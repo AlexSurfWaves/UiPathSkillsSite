@@ -916,6 +916,54 @@ function renderGuide() {
   }).join("");
 }
 
+function legacyCopyText(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  document.body.appendChild(textarea);
+  textarea.select();
+  const copied = document.execCommand("copy");
+  textarea.remove();
+  if (!copied) {
+    throw new Error("Copy command failed");
+  }
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    legacyCopyText(text);
+  }
+}
+
+function setupInstallCommandCopy() {
+  const button = document.querySelector("[data-copy-install-command]");
+  if (!button) return;
+
+  button.addEventListener("click", async () => {
+    const target = document.querySelector(`#${button.dataset.copyTarget}`);
+    const command = target?.textContent?.trim();
+    if (!command) return;
+
+    try {
+      await copyText(command);
+      button.classList.add("is-copied");
+      button.setAttribute("aria-label", t("ui.copiedInstallCommand"));
+      button.setAttribute("title", t("ui.copiedInstallCommand"));
+      window.setTimeout(() => {
+        button.classList.remove("is-copied");
+        button.setAttribute("aria-label", t("ui.copyInstallCommand"));
+        button.setAttribute("title", t("ui.copyInstallCommand"));
+      }, 1600);
+    } catch {
+      button.classList.remove("is-copied");
+    }
+  });
+}
+
 if (listEl && searchEl) {
   listEl.addEventListener("click", (event) => {
     const button = event.target.closest("[data-skill]");
@@ -961,4 +1009,5 @@ if (listEl && searchEl) {
   renderGuide();
   renderSkillList();
   renderDetail();
+  setupInstallCommandCopy();
 }

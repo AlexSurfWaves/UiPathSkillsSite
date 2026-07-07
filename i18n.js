@@ -92,6 +92,9 @@ const i18n = (() => {
     document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
       element.setAttribute("aria-label", t(element.dataset.i18nAria));
     });
+    document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+      element.setAttribute("title", t(element.dataset.i18nTitle));
+    });
     document.querySelectorAll("[data-lang-choice]").forEach((button) => {
       const isActive = button.dataset.langChoice === currentLanguage;
       button.classList.toggle("is-active", isActive);
