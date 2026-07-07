@@ -176,11 +176,12 @@ const skills = [
       "Fai installare/verificare tool `codedapp` e dipendenze TypeScript prima del build.",
       "Per Action App, definisci prima `action-schema.json` e mapping di input/output.",
       "Per dashboard, risolvi metriche, scope OAuth e sorgenti Insights/RTM prima di build e deploy.",
+      "Per Web App e dashboard, leggi `scope` da `uipath.json`; per Action App usa `new UiPath()` senza `sdk.initialize()`.",
       "Usa preview/debug locale, poi pack/publish/deploy quando la UI è verificata."
     ],
     cli: ["uip codedapp create", "uip codedapp build", "uip codedapp debug", "uip codedapp pack", "references/dashboards/CAPABILITY.md"],
     prompt: "Crea una Coded Action App o un dashboard operativo UiPath, con schema/scope corretti, SDK UiPath e build verificata.",
-    handoffs: ["uipath-human-in-the-loop", "uipath-tasks", "uipath-functions", "uipath-platform", "uipath-solution", "uipath-agents", "uipath-rpa"],
+    handoffs: ["uipath-human-in-the-loop", "uipath-tasks", "uipath-functions", "uipath-insights", "uipath-platform", "uipath-solution", "uipath-agents", "uipath-rpa"],
     caveat: "Per workflow `.cs` o `.xaml` non usare questa skill: passa a `uipath-rpa`."
   },
   {
@@ -231,7 +232,7 @@ const skills = [
     status: "in-development",
     product: "HITL, Action Center authoring",
     files: ".flow, agent.json, .bpmn",
-    purpose: "Progetta gate umani, approvazioni, escalation, enrichment e validazioni dentro Flow, Maestro o agenti coded/low-code.",
+    purpose: "Progetta gate umani, approvazioni, escalation, enrichment e validazioni dentro Flow, Maestro o agenti low-code; per coded agent passa a `uipath-agents`.",
     when: "Usala quando l'automazione deve fermarsi per decisioni umane, approvazione, controllo qualità o raccolta dati.",
     how: [
       "Fai identificare la surface: Flow, Low-Code Agent, Maestro o Coded Action App.",
@@ -264,6 +265,26 @@ const skills = [
     caveat: "Non usarla per Document Understanding review; la skill IXP copre quel caso."
   },
   {
+    id: "uipath-insights",
+    name: "uipath-insights",
+    category: "Observability",
+    phase: "operate",
+    status: "preview",
+    product: "Insights, job monitoring",
+    files: "job metrics, process execution data",
+    purpose: "Interroga metriche aggregate sui job UiPath via `uip insights`: health, failure analysis, trend di completamento e performance per processo.",
+    when: "Usala per job success rate, processi che falliscono di piu, failure reasons, job timeline, pending/faulted jobs e KPI operativi.",
+    how: [
+      "Verifica login, tenant e time range prima di ogni query.",
+      "Parti da `summary`, poi scendi su `top-failures`, `failures-by-reason`, timeline o process details.",
+      "Per start/stop/log di un job specifico passa a `uipath-platform`; per root cause dettagliata passa a `uipath-troubleshoot`."
+    ],
+    cli: ["uip insights jobs summary", "uip insights jobs top-failures", "uip insights jobs failures-by-reason", "uip insights jobs completed-timeline", "uip insights jobs process-details"],
+    prompt: "Analizza la salute dei job UiPath negli ultimi 7 giorni: mostra KPI, trend, processi piu fallosi e failure reason principali con output JSON.",
+    handoffs: ["uipath-platform", "uipath-troubleshoot", "uipath-coded-apps", "uipath-rpa"],
+    caveat: "Non avvia, ferma o modifica job e non fa root-cause profonda di un errore singolo; copre analytics aggregate dei job."
+  },
+  {
     id: "uipath-ixp",
     name: "uipath-ixp",
     category: "Documents & AI",
@@ -289,19 +310,19 @@ const skills = [
     category: "Platform",
     phase: "operate",
     status: "preview",
-    product: "Cloud, Orchestrator, Integration Service, Data Fabric",
-    files: "tenant resources, entities, records",
-    purpose: "Copre operazioni UiPath Cloud e Orchestrator via `uip`: login, tenant, folder, assets, queue, jobs, packages, Integration Service, Data Fabric, LLM Gateway, traces e licensing.",
-    when: "Usala prima di qualunque codice o workflow che tocchi UiPath Cloud, Orchestrator, Studio Web, Integration Service o Data Fabric.",
+    product: "Cloud, Orchestrator, Integration Service, Data Fabric, LLM Gateway",
+    files: "tenant resources, entities, records, traces",
+    purpose: "Copre operazioni UiPath Cloud via `uip`: auth, tenant, folder, assets, queue, jobs, packages, Integration Service, Data Fabric, LLM Gateway, traces e licensing.",
+    when: "Usala prima di qualunque codice o workflow che tocchi UiPath Cloud, Orchestrator, Studio Web, Integration Service, Data Fabric, LLM Gateway o trace.",
     how: [
       "Fai usare `uip` prima di considerare REST manuale.",
-      "Per Data Fabric, fai leggere prima `references/data-fabric/data-fabric.md` e poi il topic specifico su schema, record, choice set, file o import.",
+      "Per Data Fabric, fai leggere prima `references/data-fabric/data-fabric.md` e poi il topic specifico su schema, record, query, choice set, file o import CSV.",
       "Richiedi `--output json` e filtri server-side per risultati affidabili.",
       "Usala come skill di supporto quando RPA, Flow o Agent devono scoprire risorse tenant."
     ],
     cli: ["uip login status", "uip or folders list", "uip or assets create", "uip df entities list", "uip df records query", "uip is connections list", "uip traces spans get"],
     prompt: "Verifica login e tenant, trova la folder corretta, lista risorse Orchestrator e Data Fabric necessarie e restituisci i riferimenti da usare nel workflow.",
-    handoffs: ["uipath-solution", "uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-agents", "uipath-test", "uipath-connector-builder", "uipath-troubleshoot"],
+    handoffs: ["uipath-solution", "uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-agents", "uipath-test", "uipath-insights", "uipath-connector-builder", "uipath-troubleshoot"],
     caveat: "Il REST diretto è fallback. Nella maggioranza dei casi il CLI gestisce header, paginazione, tenant e shape di output meglio del codice custom."
   },
   {
@@ -410,10 +431,10 @@ const skills = [
     category: "Quality",
     phase: "operate",
     status: "preview",
-    product: "Review, quality gate",
+    product: "Review, quality gate, rule catalog",
     files: ".xaml, .cs, .flow, .bpmn, agent.json, .uipx",
-    purpose: "Revisore read-only per struttura, qualità, best practice, allineamento PDD/SDD e rischi di deploy su artefatti UiPath.",
-    when: "Usala prima di merge, publish o deploy, oppure quando vuoi un audit indipendente senza modifiche.",
+    purpose: "Revisore read-only per struttura, qualita, best practice, cataloghi regole, allineamento PDD/SDD e rischi di deploy su artefatti UiPath.",
+    when: "Usala prima di merge, publish o deploy, oppure quando vuoi un audit indipendente senza modifiche su RPA, agenti, Flow, BPMN, API workflow, Coded Apps o Solution.",
     how: [
       "Chiedi review read-only e indica scope: progetto, soluzione o artefatto singolo.",
       "Fai includere validazioni automatiche disponibili, poi giudizio manuale per pattern e rischi.",
@@ -441,7 +462,7 @@ const skills = [
     ],
     cli: ["uip or jobs logs", "uip traces spans get", "uip maestro flow incidents", "runtime exception playbooks"],
     prompt: "Questo job UiPath è faulted: analizza log e trace, formula ipotesi, verifica la root cause e proponi la correzione minima.",
-    handoffs: ["uipath-platform", "uipath-rpa", "uipath-maestro-flow", "uipath-feedback"],
+    handoffs: ["uipath-platform", "uipath-insights", "uipath-rpa", "uipath-maestro-flow", "uipath-feedback"],
     caveat: "Non saltare direttamente alla soluzione: la skill è pensata per preservare evidenza e ragionamento causale."
   },
   {
@@ -533,9 +554,9 @@ const capabilityDetails = {
     "Genera dashboard analytics, observability e governance da richiesta naturale, con metriche agent health, KPI, error rate e consumption trends.",
     "Valida `action-schema.json`, gestisce input/output di Action Center e genera UI per approvazione o data entry.",
     "Usa SDK `@uipath/uipath-typescript` per Orchestrator, Data Fabric, Maestro, Action Center, agenti, governance, traces, feedback e pagination.",
-    "Gestisce OAuth scopes e Insights/RTM per dashboard prima di build, deploy o runtime SDK calls.",
+    "Gestisce scope OAuth da `uipath.json`, scope `Apps.Read Apps.Write` per publish headless e sorgenti Insights/RTM prima di build o deploy.",
     "Esegue debug locale, build, pack, publish e deploy con `uip codedapp`.",
-    "Supporta OAuth scopes, client setup, file sync e pattern per app con document tab o form complessi."
+    "Supporta client setup, file sync e pattern per app con document tab o form complessi; nelle Action App evita `sdk.initialize()`."
   ],
   "uipath-functions": [
     "Scaffolda Python Coded Functions con `uip functions new --language py` e genera metadati con `uip functions init`.",
@@ -566,6 +587,13 @@ const capabilityDetails = {
     "Segue il flusso discover -> plan -> act -> verify per evitare modifiche su task sbagliati.",
     "Supporta troubleshooting di permessi, tenant errato, folder scope e task non trovato."
   ],
+  "uipath-insights": [
+    "Interroga `uip insights jobs` per KPI job, success rate, processing time e conteggi aggregati.",
+    "Analizza trend completed/uncompleted, process breakdown, top failures, failure reasons e failure details.",
+    "Richiede sempre un time range relativo o assoluto e usa `--output json` per parsing affidabile.",
+    "Parte da `summary` e poi fa drill-down sui segnali piu rilevanti.",
+    "Rimanda a `uipath-platform` per gestire job specifici e a `uipath-troubleshoot` per root-cause di errori puntuali."
+  ],
   "uipath-ixp": [
     "Supporta progetti IXP e Document Understanding fuori dal contesto Flow.",
     "Rivede predizioni, conferma campi validi e identifica errori di estrazione ricorrenti.",
@@ -576,11 +604,12 @@ const capabilityDetails = {
   "uipath-platform": [
     "Opera su UiPath Cloud, Orchestrator, Studio Web, Integration Service, Data Fabric, LLM Gateway, traces e licensing via `uip` CLI.",
     "Gestisce login, tenant, folder, assets, queues, queue items, buckets, files, libraries, webhooks, triggers, jobs e processes.",
-    "Gestisce Data Fabric via `uip df`: entity schema, record CRUD, query, aggregazioni, choice set, file attachment, CSV import e folder scoping.",
+    "Gestisce Data Fabric via `uip df`: entity schema, record CRUD, search/query, aggregazioni, choice set, file attachment, CSV import e folder scoping.",
     "Per Data Fabric rispetta preview/approval gate su schema, choice set e operazioni irreversibili, con `--folder-key` quando necessario.",
     "Scopre connector, connection, activity e trigger Integration Service per alimentare Flow, RPA e agenti.",
     "Configura o audita BYO LLM connection per OpenAI, Azure OpenAI, Bedrock, Vertex, Anthropic e compatibili.",
-    "Legge trace span e risorse operative, usando REST solo quando il CLI non copre il caso."
+    "Legge trace span e risorse operative, usando REST solo quando il CLI non copre il caso.",
+    "Passa a `uipath-insights` quando servono metriche aggregate e trend sui job invece di gestione job puntuale."
   ],
   "uipath-admin": [
     "Gestisce Identity Server: utenti, gruppi, robot account, external apps, PAT e credenziali federate.",
@@ -621,7 +650,7 @@ const capabilityDetails = {
   "uipath-review": [
     "Esegue audit read-only su RPA, agenti, Flow, BPMN, Coded Apps, Case e Solution.",
     "Scopre progetto, PDD/SDD, lingua, framework, artifact marker e validazioni disponibili.",
-    "Combina validation automatica, review CLI, catalogo regole e giudizio manuale.",
+    "Combina validation automatica, review CLI, cataloghi regole per agenti/RPA/Flow/BPMN/API/Coded Apps e giudizio manuale.",
     "Produce finding bloccanti, warning, opportunità, allineamento PDD, risultati validation e next step.",
     "Calcola grading per agenti e valuta ottimizzazione, sicurezza, mantenibilità e readiness al deploy."
   ],
@@ -669,8 +698,8 @@ const lifecycle = [
   {
     key: "operate",
     title: "5. Operate",
-    text: "Tenant, Orchestrator, task runtime, test e run.",
-    skills: ["uipath-platform", "uipath-admin", "uipath-tasks", "uipath-test"]
+    text: "Tenant, Orchestrator, task runtime, Insights, test e run.",
+    skills: ["uipath-platform", "uipath-admin", "uipath-tasks", "uipath-insights", "uipath-test"]
   },
   {
     key: "improve",

@@ -30,7 +30,7 @@ window.uipathLocales.it = {
     skillCount: "Skill",
     commit: "Commit",
     localCli: "CLI locale",
-    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.198.0. Hash completo: b224d4716a7f40bff400832638bc28adfe36580f.",
+    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.198.0. Schema manifest: 2. Hash completo: f6f621cb9379e4aa52bc2e470191f5d2169507e4.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "Dalla discovery all'operatività",
     when: "Quando usarla",
@@ -47,7 +47,7 @@ window.uipathLocales.it = {
     graphTitle: "Grafo navigabile delle skill UiPath",
     graphIntro: "Ogni nodo è una skill. Le linee mostrano gli handoff/sub-skill che Codex usa quando una competenza deve delegare a un'altra. Passa il mouse su un nodo per leggere cosa fa la skill; trascina i nodi per migliorare la leggibilità del grafo.",
     graphVersion: "Versione skill",
-    graphMeta: "23 nodi · relazioni da handoff",
+    graphMeta: "24 nodi · relazioni da handoff",
     graphSearch: "Cerca skill",
     graphPhase: "Fase",
     reset: "Reset",
@@ -105,7 +105,7 @@ window.uipathLocales.it = {
     },
     operate: {
       title: "5. Operate",
-      text: "Tenant, Orchestrator, task runtime, test e run."
+      text: "Tenant, Orchestrator, task runtime, Insights, test e run."
     },
     improve: {
       title: "6. Improve",

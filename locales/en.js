@@ -30,7 +30,7 @@ window.uipathLocales.en = {
     skillCount: "Skills",
     commit: "Commit",
     localCli: "Local CLI",
-    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.198.0. Full hash: b224d4716a7f40bff400832638bc28adfe36580f.",
+    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.198.0. Manifest schema: 2. Full hash: f6f621cb9379e4aa52bc2e470191f5d2169507e4.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "From discovery to operations",
     when: "When to use it",
@@ -47,7 +47,7 @@ window.uipathLocales.en = {
     graphTitle: "Navigable graph of UiPath skills",
     graphIntro: "Each node is a skill. Lines show the handoffs and sub-skills Codex uses when one capability needs to delegate to another. Hover a node to read what the skill does; drag nodes to improve graph readability.",
     graphVersion: "Skills version",
-    graphMeta: "23 nodes · handoff relationships",
+    graphMeta: "24 nodes · handoff relationships",
     graphSearch: "Search skills",
     graphPhase: "Phase",
     reset: "Reset",
@@ -105,7 +105,7 @@ window.uipathLocales.en = {
     },
     operate: {
       title: "5. Operate",
-      text: "Tenant, Orchestrator, runtime tasks, tests, and runs."
+      text: "Tenant, Orchestrator, runtime tasks, Insights, tests, and runs."
     },
     improve: {
       title: "6. Improve",
@@ -314,6 +314,7 @@ window.uipathLocales.en = {
         "Verify/install the `codedapp` tooling and TypeScript dependencies before building.",
         "For Action Apps, define `action-schema.json` and input/output mapping first.",
         "For dashboards, resolve metrics, OAuth scopes, and Insights/RTM sources before build and deploy.",
+        "For Web Apps and dashboards, read `scope` from `uipath.json`; for Action Apps, use `new UiPath()` without `sdk.initialize()`.",
         "Use local preview/debug, then pack/publish/deploy once the UI has been verified."
       ],
       prompt: "Create a Coded Action App or UiPath operations dashboard with correct schema/scopes, UiPath SDK usage, and verified build.",
@@ -323,9 +324,9 @@ window.uipathLocales.en = {
         "Generates analytics, observability, and governance dashboards from natural-language requests, including agent health, KPIs, error rate, and consumption trends.",
         "Validates `action-schema.json`, handles Action Center input/output, and generates approval or data-entry UI.",
         "Uses the `@uipath/uipath-typescript` SDK for Orchestrator, Data Fabric, Maestro, Action Center, agents, governance, traces, feedback, and pagination.",
-        "Manages OAuth scopes and Insights/RTM sources before dashboard build, deploy, or runtime SDK calls.",
+        "Manages OAuth scopes from `uipath.json`, `Apps.Read Apps.Write` scopes for headless publish, and Insights/RTM sources before build or deploy.",
         "Runs local debug, build, pack, publish, and deploy with `uip codedapp`.",
-        "Supports OAuth scopes, client setup, file sync, and patterns for apps with document tabs or complex forms."
+        "Supports client setup, file sync, and patterns for apps with document tabs or complex forms; avoids `sdk.initialize()` in Action Apps."
       ]
     },
     "uipath-functions": {
@@ -409,6 +410,26 @@ window.uipathLocales.en = {
         "Supports troubleshooting permissions, wrong tenant, folder scope, and task-not-found issues."
       ]
     },
+    "uipath-insights": {
+      category: "Observability",
+      product: "Insights, job monitoring",
+      purpose: "Queries aggregated UiPath job metrics through `uip insights`: automation health, failure analysis, completion trends, and process performance.",
+      when: "Use it for job success rate, processes that fail the most, failure reasons, job timelines, pending/faulted jobs, and operational KPIs.",
+      how: [
+        "Verify login, tenant, and a time range before every query.",
+        "Start with `summary`, then drill into `top-failures`, `failures-by-reason`, timelines, or process details.",
+        "For starting, stopping, or inspecting a specific job, switch to `uipath-platform`; for detailed root cause, switch to `uipath-troubleshoot`."
+      ],
+      prompt: "Analyze UiPath job health for the last 7 days: show KPIs, trends, top failing processes, and main failure reasons with JSON-backed evidence.",
+      caveat: "It does not start, stop, or modify jobs and does not perform deep root-cause analysis of one specific error; it covers aggregate job analytics.",
+      capabilities: [
+        "Queries `uip insights jobs` for job KPIs, success rate, processing time, and aggregate counts.",
+        "Analyzes completed and uncompleted trends, process breakdowns, top failures, failure reasons, and failure details.",
+        "Always requires a relative or absolute time range and uses `--output json` for reliable parsing.",
+        "Starts from `summary` and drills down into the most relevant operational signals.",
+        "Hands off to `uipath-platform` for managing specific jobs and to `uipath-troubleshoot` for root cause of individual errors."
+      ]
+    },
     "uipath-ixp": {
       category: "Documents and AI",
       product: "IXP, Document Understanding",
@@ -431,12 +452,12 @@ window.uipathLocales.en = {
     },
     "uipath-platform": {
       category: "Platform",
-      product: "Cloud, Orchestrator, Integration Service, Data Fabric",
+      product: "Cloud, Orchestrator, Integration Service, Data Fabric, LLM Gateway",
       purpose: "Covers UiPath Cloud and Orchestrator operations through `uip`: login, tenants, folders, assets, queues, jobs, packages, Integration Service, Data Fabric, LLM Gateway, traces, and licensing.",
-      when: "Use it before any code or workflow touches UiPath Cloud, Orchestrator, Studio Web, Integration Service, or Data Fabric.",
+      when: "Use it before any code or workflow touches UiPath Cloud, Orchestrator, Studio Web, Integration Service, Data Fabric, LLM Gateway, or traces.",
       how: [
         "Use `uip` before considering manual REST calls.",
-        "For Data Fabric, read `references/data-fabric/data-fabric.md` first and then the specific topic for schema, records, choice sets, files, or import.",
+        "For Data Fabric, read `references/data-fabric/data-fabric.md` first and then the specific topic for schema, records, query/search, choice sets, files, or CSV import.",
         "Request `--output json` and server-side filters for reliable results.",
         "Use it as a support skill when RPA, Flow, or Agents need to discover tenant resources."
       ],
@@ -445,11 +466,12 @@ window.uipathLocales.en = {
       capabilities: [
         "Operates on UiPath Cloud, Orchestrator, Studio Web, Integration Service, Data Fabric, LLM Gateway, traces, and licensing through the `uip` CLI.",
         "Manages login, tenant, folders, assets, queues, queue items, buckets, files, libraries, webhooks, triggers, jobs, and processes.",
-        "Manages Data Fabric through `uip df`: entity schema, record CRUD, queries, aggregations, choice sets, file attachments, CSV import, and folder scoping.",
+        "Manages Data Fabric through `uip df`: entity schema, record CRUD, search/query, aggregations, choice sets, file attachments, CSV import, and folder scoping.",
         "For Data Fabric, respects preview/approval gates for schema, choice sets, and irreversible operations, with `--folder-key` when needed.",
         "Discovers Integration Service connectors, connections, activities, and triggers for Flow, RPA, and agents.",
         "Configures or audits BYO LLM connections for OpenAI, Azure OpenAI, Bedrock, Vertex, Anthropic, and compatible providers.",
-        "Reads trace spans and operational resources, using REST only when the CLI does not cover the case."
+        "Reads trace spans and operational resources, using REST only when the CLI does not cover the case.",
+        "Hands off to `uipath-insights` when the task needs aggregate job metrics and trends instead of direct job management."
       ]
     },
     "uipath-admin": {
@@ -555,9 +577,9 @@ window.uipathLocales.en = {
     },
     "uipath-review": {
       category: "Quality",
-      product: "Read-only review",
-      purpose: "Runs read-only audits for structure, quality, and best practices across RPA, agents, flows, BPMN, coded apps, and solutions.",
-      when: "Use it as a quality gate before deployment or when you want findings without changing files.",
+      product: "Read-only review, rule catalog",
+      purpose: "Runs read-only audits for structure, quality, rule catalogs, PDD/SDD alignment, and deployment risks across UiPath artifacts.",
+      when: "Use it as a quality gate before merge, publish, or deploy, or when you want an independent audit across RPA, agents, Flow, BPMN, API Workflow, Coded Apps, or Solutions.",
       how: [
         "Run it before deployment or before a risky refactor.",
         "Ask for findings ordered by severity with file references and missing validations.",
@@ -566,9 +588,9 @@ window.uipathLocales.en = {
       prompt: "Review this UiPath project read-only, list blocking issues first, and include validation evidence and recommended next steps.",
       caveat: "It does not edit files. Use the domain skill for fixes after the review.",
       capabilities: [
-        "Runs read-only audits on RPA, agents, Flow, BPMN, Coded Apps, Case, and Solution artifacts.",
+        "Runs read-only audits on RPA, agents, Flow, BPMN, API Workflow, Coded Apps, Case, and Solution artifacts.",
         "Discovers project, PDD/SDD, language, framework, artifact markers, and available validations.",
-        "Combines automated validation, CLI review, rule catalog, and manual judgment.",
+        "Combines automated validation, CLI review, rule catalogs for agents/RPA/Flow/BPMN/API/Coded Apps, and manual judgment.",
         "Produces blocking findings, warnings, opportunities, PDD alignment, validation results, and next steps.",
         "Calculates grading for agents and evaluates optimization, security, maintainability, and deployment readiness."
       ]
