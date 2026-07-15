@@ -724,6 +724,7 @@ h3 {
 
 .detail-main,
 .detail-side {
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 0;
   background: var(--paper);
@@ -741,11 +742,20 @@ h3 {
 .detail-head {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 16px;
   margin-bottom: 16px;
 }
 
+.detail-head > div:first-child {
+  min-width: 0;
+  flex: 1 1 190px;
+}
+
 .badges {
+  min-width: 0;
+  max-width: min(100%, 680px);
+  flex: 1 1 460px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -761,6 +771,15 @@ h3 {
   font-size: 0.78rem;
   font-weight: 800;
   white-space: nowrap;
+}
+
+.badge-files {
+  flex-basis: 100%;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
 }
 
 .badge.preview {
@@ -1536,6 +1555,7 @@ h3 {
   }
 
   .badges {
+    max-width: none;
     justify-content: flex-start;
     margin-top: 10px;
   }

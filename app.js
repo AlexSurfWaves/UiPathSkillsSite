@@ -56,9 +56,10 @@ const skills = [
       "Apri Codex nella root che contiene `project.json`, così può rilevare framework, dipendenze e workflow.",
       "Lascia che Codex usi `uip rpa validate` per file e `uip rpa build` a livello progetto prima di dichiarare completato; la lista analyzer rules si consulta solo quando serve.",
       "Per UI automation, fai usare Object Repository e target capture UiPath; evita scorciatoie con Playwright, Selenium o DOM.",
-      "Nel debug headless, usa breakpoint per attività e interroga `debug state` fino a uno stato stabile prima di decidere il passo successivo."
+      "Nel debug headless, usa breakpoint per attività e interroga `debug state` fino a uno stato stabile prima di decidere il passo successivo.",
+      "Per problemi UI avanzati, abilita `--profiling` per raccogliere timing per attività e screenshot prima/dopo l'esecuzione."
     ],
-    cli: ["uip rpa init", "uip rpa validate", "uip rpa build", "uip rpa debug start --breakpoints", "uip rpa debug state", "uip rpa debug set-breakpoints", "agents/uipath-project-discovery-agent.md"],
+    cli: ["uip rpa init", "uip rpa validate", "uip rpa build", "uip rpa debug start --breakpoints", "uip rpa debug start --profiling", "uip rpa debug state", "uip rpa debug set-breakpoints", "agents/uipath-project-discovery-agent.md"],
     prompt: "Nel progetto RPA aperto, aggiungi un workflow XAML per processare una queue, valida il file e poi compila l'intero progetto.",
     handoffs: ["uipath-platform", "uipath-test", "uipath-solution", "uipath-agents", "uipath-maestro-flow", "uipath-troubleshoot"],
     caveat: "Per `debug` e `run` ci possono essere effetti reali su app, email, code o API: chiedi sempre a Codex di distinguere validate/build da esecuzione."
@@ -180,7 +181,8 @@ const skills = [
       "Per Action App, definisci prima `action-schema.json` e mapping di input/output.",
       "Per dashboard, risolvi metriche, scope OAuth e sorgenti Insights/RTM prima di build e deploy.",
       "Per Web App e dashboard, leggi `scope` da `uipath.json`; per Action App usa `new UiPath()` senza `sdk.initialize()`.",
-      "Usa preview/debug locale, poi pack/publish/deploy quando la UI è verificata."
+      "Usa preview/debug locale, poi pack/publish/deploy quando la UI è verificata.",
+      "Nel deploy non interattivo, risolvi la folder key per workspace personale, cartella esistente o nuova cartella; per i dashboard scegli anche la modalità standalone o governance."
     ],
     cli: ["uip codedapp create", "uip codedapp build", "uip codedapp debug", "uip codedapp pack", "references/dashboards/CAPABILITY.md"],
     prompt: "Crea una Coded Action App o un dashboard operativo UiPath, con schema/scope corretti, SDK UiPath e build verificata.",
@@ -465,6 +467,7 @@ const skills = [
     how: [
       "Parti dal segnale più forte e definisci sintomo, scope, ultimo stato noto funzionante e cambiamenti recenti.",
       "Scegli il playbook più vicino, raccogli la checklist di evidenze e segui il relativo decision tree.",
+      "Salva ogni risposta CLI grezza sotto la root dell'indagine e non ricostruire manualmente i file di evidenza se una redirezione fallisce.",
       "Formula ipotesi formali solo se non esiste un playbook adatto, le cause sono multiple o cross-domain, oppure le evidenze si contraddicono.",
       "Quando la causa è confermata, passa alla skill di prodotto per l'implementazione della correzione."
     ],
@@ -521,6 +524,7 @@ const capabilityDetails = {
     "Centralizza error-handling, UIA-only boundaries e placeholder selector pattern per evitare stub che validano ma non automatizzano.",
     "Applica la validazione in due fasi: `validate` per ciascun file modificato e `build` per l'intero progetto; consulta le analyzer rules solo on demand.",
     "Supporta debug headless con breakpoint per attività, `debug state`, aggiornamento breakpoint e attesa di uno stato stabile prima di proseguire.",
+    "Raccoglie profiling avanzato con timing per attività e screenshot prima/dopo l'esecuzione tramite `uip rpa debug start --profiling`.",
     "Interpreta `DebugState: Suspended` come eccezione in attesa di decisione anche quando `HasErrors` è ancora false.",
     "Supporta pattern enterprise come REFramework, queue processing, trigger, library authoring, long-running workflow e coded fallback."
   ],
@@ -528,6 +532,7 @@ const capabilityDetails = {
     "Crea e modifica progetti `.flow` dentro una UiPath Solution con layout compatibile Studio Web.",
     "Aggiunge nodi, edge, variabili, trigger, connector, managed HTTP, script, subflow, RPA, agenti, approval e IxP.",
     "Usa la registry per scegliere node type e connector reali, evitando chiavi dedotte dal nome commerciale.",
+    "Per i generic connector trigger risolve e passa `objectName` in `node configure --detail`; i curated trigger usano il nome oggetto incluso nel manifest.",
     "Distingue nodi posseduti dal CLI e nodi editabili nel JSON, riducendo errori di configurazione.",
     "Valida, formatta, pubblica, carica in Studio Web, gestisce run/instance e supporta eval set con `uip maestro flow eval`.",
     "Considera i warning di `flow validate` difetti da correggere anche con exit code 0, in particolare connector keyword e fallback HTTP generici.",
@@ -569,7 +574,7 @@ const capabilityDetails = {
     "Valida `action-schema.json`, gestisce input/output di Action Center e genera UI per approvazione o data entry.",
     "Usa SDK `@uipath/uipath-typescript` per Orchestrator, Data Fabric, Maestro, Action Center, agenti, governance, traces, feedback e pagination.",
     "Gestisce scope OAuth da `uipath.json`, scope `Apps.Read Apps.Write` per publish headless e sorgenti Insights/RTM prima di build o deploy.",
-    "Esegue debug locale, build, pack, publish e deploy con `uip codedapp`.",
+    "Esegue debug locale, build, pack, publish e deploy non interattivo con folder key per workspace personale, cartella esistente o nuova cartella e modalità dashboard standalone/governance.",
     "Supporta client setup, file sync e pattern per app con document tab o form complessi; nelle Action App evita `sdk.initialize()`."
   ],
   "uipath-functions": [
@@ -625,6 +630,7 @@ const capabilityDetails = {
     "Legge sempre il reference Data Fabric prima dei comandi `uip df`, inclusi upload, download e cancellazione degli attachment.",
     "Per Data Fabric rispetta preview/approval gate su schema, choice set e operazioni irreversibili, con `--folder-key` quando necessario.",
     "Scopre connector, connection, activity e trigger Integration Service per alimentare Flow, RPA e agenti.",
+    "Risolve l'oggetto dei generic CRUD trigger Integration Service e lo espone a Maestro Flow come `detail.objectName`.",
     "Configura o audita BYO LLM connection per OpenAI, Azure OpenAI, Bedrock, Vertex, Anthropic e compatibili.",
     "Legge trace span e risorse operative, usando REST solo quando il CLI non copre il caso.",
     "Passa a `uipath-insights` quando servono metriche aggregate e trend sui job invece di gestione job puntuale.",
@@ -678,6 +684,7 @@ const capabilityDetails = {
   "uipath-troubleshoot": [
     "Ancora l'indagine al segnale più forte, definendo sintomo, scope, ultimo stato funzionante e cambiamenti recenti.",
     "Seleziona il playbook appropriato, raccoglie la checklist di evidenze e segue il decision tree prima di ampliare l'analisi.",
+    "Conserva output CLI verbatim sotto la root dell'indagine e usa il fallback documentato quando il filtro esatto per nome di una queue restituisce HTTP 400.",
     "Usa ipotesi formali solo su trigger di escalation: nessun playbook adatto, cause multiple o cross-domain, oppure evidenze contraddittorie.",
     "Analizza log, trace, incident, job, queue, error code, runtime exception e storia configurativa.",
     "Distingue causa primaria, fattori contribuenti e fix minimo verificabile, poi passa la correzione alla skill proprietaria.",
@@ -900,7 +907,7 @@ function renderDetail() {
   document.querySelector("#skillBadges").innerHTML = [
     `<span class="badge ${badgeClass(skill.status)}">${statusLabel(skill.status)}</span>`,
     `<span class="badge">${phaseLabel(skill.phase)}</span>`,
-    `<span class="badge">${skill.files}</span>`
+    `<span class="badge badge-files">${skill.files}</span>`
   ].join("");
 
   document.querySelector("#skillHow").innerHTML = (localized.how || skill.how).map((item) => `<li>${item}</li>`).join("");

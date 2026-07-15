@@ -34,8 +34,8 @@ window.uipathLocales.en = {
     skillCount: "Skills",
     commit: "Commit",
     localCli: "Local CLI",
-    snapshotDate: "July 14, 2026",
-    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.199.0. Manifest schema: 2. Full hash: 4c477c77acaa996ad6e3977665989b86bba42f3c.",
+    snapshotDate: "July 15, 2026",
+    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.199.0. Manifest schema: 2. Full hash: ea3540a02f238ec995e215cfc085eaaed14c0cfb.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "From discovery to operations",
     when: "When to use it",
@@ -196,7 +196,8 @@ window.uipathLocales.en = {
         "Open Codex in the root that contains `project.json`, so it can detect framework, dependencies, and workflows.",
         "Let Codex run `uip rpa validate` for individual files and `uip rpa build` at project level before declaring the work complete; list analyzer rules only when needed.",
         "For UI automation, use UiPath Object Repository and target capture; avoid shortcuts through Playwright, Selenium, or the DOM.",
-        "In headless debug, use activity breakpoints and poll `debug state` until a stable state is reached before choosing the next action."
+        "In headless debug, use activity breakpoints and poll `debug state` until a stable state is reached before choosing the next action.",
+        "For advanced UI issues, enable `--profiling` to collect per-activity timings and before/after execution screenshots."
       ],
       prompt: "In the open RPA project, add a XAML workflow to process a queue, validate the file, and then build the whole project.",
       caveat: "`debug` and `run` can have real effects on apps, email, queues, or APIs: always ask Codex to distinguish validate/build from execution.",
@@ -209,6 +210,7 @@ window.uipathLocales.en = {
         "Centralizes error handling, UIA-only boundaries, and placeholder selector patterns to avoid stubs that validate but do not automate.",
         "Applies two-phase validation: `validate` for every changed file and `build` for the full project; analyzer-rule listing is on demand.",
         "Supports headless debug with activity breakpoints, `debug state`, breakpoint updates, and stable-state polling before continuing.",
+        "Collects advanced profiling with per-activity timings and before/after screenshots through `uip rpa debug start --profiling`.",
         "Treats `DebugState: Suspended` as an exception awaiting a decision even when `HasErrors` is still false.",
         "Supports enterprise patterns such as REFramework, queue processing, triggers, library authoring, long-running workflows, and coded fallbacks."
       ]
@@ -229,6 +231,7 @@ window.uipathLocales.en = {
         "Creates and edits `.flow` projects inside a UiPath Solution with a Studio Web compatible layout.",
         "Adds nodes, edges, variables, triggers, connectors, managed HTTP, scripts, subflows, RPA, agents, approvals, and IXP.",
         "Uses the registry to choose real node types and connectors, avoiding keys guessed from commercial names.",
+        "For generic connector triggers, resolves and passes `objectName` in `node configure --detail`; curated triggers use the object name embedded in the manifest.",
         "Distinguishes CLI-owned nodes from JSON-editable nodes, reducing configuration mistakes.",
         "Validates, formats, publishes, uploads to Studio Web, manages runs/instances, and supports eval sets with `uip maestro flow eval`.",
         "Treats `flow validate` warnings as defects even with exit code 0, especially connector-keyword and generic HTTP fallbacks.",
@@ -329,7 +332,8 @@ window.uipathLocales.en = {
         "For Action Apps, define `action-schema.json` and input/output mapping first.",
         "For dashboards, resolve metrics, OAuth scopes, and Insights/RTM sources before build and deploy.",
         "For Web Apps and dashboards, read `scope` from `uipath.json`; for Action Apps, use `new UiPath()` without `sdk.initialize()`.",
-        "Use local preview/debug, then pack/publish/deploy once the UI has been verified."
+        "Use local preview/debug, then pack/publish/deploy once the UI has been verified.",
+        "For non-interactive deploys, resolve the folder key for a personal workspace, an existing folder, or a newly created folder; dashboards also choose standalone or governance deploy mode."
       ],
       prompt: "Create a Coded Action App or UiPath operations dashboard with correct schema/scopes, UiPath SDK usage, and verified build.",
       caveat: "For `.cs` or `.xaml` workflows, do not use this skill: switch to `uipath-rpa`.",
@@ -339,7 +343,7 @@ window.uipathLocales.en = {
         "Validates `action-schema.json`, handles Action Center input/output, and generates approval or data-entry UI.",
         "Uses the `@uipath/uipath-typescript` SDK for Orchestrator, Data Fabric, Maestro, Action Center, agents, governance, traces, feedback, and pagination.",
         "Manages OAuth scopes from `uipath.json`, `Apps.Read Apps.Write` scopes for headless publish, and Insights/RTM sources before build or deploy.",
-        "Runs local debug, build, pack, publish, and deploy with `uip codedapp`.",
+        "Runs local debug, build, pack, publish, and non-interactive deploy with folder keys for personal, existing, or new folders plus standalone/governance dashboard modes.",
         "Supports client setup, file sync, and patterns for apps with document tabs or complex forms; avoids `sdk.initialize()` in Action Apps."
       ]
     },
@@ -490,6 +494,7 @@ window.uipathLocales.en = {
         "Always reads the Data Fabric reference before `uip df` commands, including attachment upload, download, and deletion.",
         "For Data Fabric, respects preview/approval gates for schema, choice sets, and irreversible operations, with `--folder-key` when needed.",
         "Discovers Integration Service connectors, connections, activities, and triggers for Flow, RPA, and agents.",
+        "Resolves the object for generic Integration Service CRUD triggers and exposes it to Maestro Flow as `detail.objectName`.",
         "Configures or audits BYO LLM connections for OpenAI, Azure OpenAI, Bedrock, Vertex, Anthropic, and compatible providers.",
         "Reads trace spans and operational resources, using REST only when the CLI does not cover the case.",
         "Hands off to `uipath-insights` when the task needs aggregate job metrics and trends instead of direct job management.",
@@ -628,6 +633,7 @@ window.uipathLocales.en = {
       how: [
         "Anchor on the strongest signal and define the symptom, scope, last known good state, and recent changes.",
         "Choose the closest playbook, gather its evidence checklist, and follow the decision tree.",
+        "Keep every raw CLI response rooted under the investigation directory; if capture redirection fails, rerun the command instead of reconstructing evidence by hand.",
         "Use formal hypotheses only when no playbook fits, causes are multiple or cross-domain, or evidence conflicts.",
         "Once the cause is confirmed, hand the implementation to the owning product skill."
       ],
@@ -636,6 +642,7 @@ window.uipathLocales.en = {
       capabilities: [
         "Anchors the investigation on the strongest signal, defining symptom, scope, last known good state, and recent changes.",
         "Selects the matching playbook, gathers its evidence checklist, and follows the decision tree before broadening the analysis.",
+        "Preserves verbatim CLI output under the investigation root and uses the documented fallback when an exact-name queue filter returns HTTP 400.",
         "Uses formal hypotheses only on escalation triggers: no matching playbook, multiple or cross-domain causes, or conflicting evidence.",
         "Analyzes logs, traces, incidents, jobs, queues, error codes, runtime exceptions, and configuration history.",
         "Separates primary cause, contributing factors, and the minimum verifiable fix, then hands remediation to the owning skill.",
