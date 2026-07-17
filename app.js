@@ -55,7 +55,7 @@ const skills = [
     how: [
       "Apri Codex nella root che contiene `project.json`, così può rilevare framework, dipendenze e workflow.",
       "Lascia che Codex usi `uip rpa validate` per file e `uip rpa build` a livello progetto prima di dichiarare completato; la lista analyzer rules si consulta solo quando serve.",
-      "Per UI automation, fai usare Object Repository e target capture UiPath; evita scorciatoie con Playwright, Selenium o DOM.",
+      "Per UI automation, usa Object Repository e target capture UiPath; collega i riferimenti con il link di default e usa l'embed solo come fallback per il singolo target.",
       "Nel debug headless, usa breakpoint per attività e interroga `debug state` fino a uno stato stabile prima di decidere il passo successivo.",
       "Per problemi UI avanzati, abilita `--profiling` per raccogliere timing per attività e screenshot prima/dopo l'esecuzione."
     ],
@@ -117,7 +117,7 @@ const skills = [
     how: [
       "Parti da `sdd.md` quando esiste; altrimenti fai raccogliere a Codex le informazioni minime.",
       "Per greenfield fai generare `tasks.md` e poi `caseplan.json` con recipe JSON dedicate.",
-      "Se il registry è vuoto, consenti la creazione inline di Agent o API Workflow solo dopo che l'utente sceglie esplicitamente `Create` al gate.",
+      "Quando il registry non trova risorse, raggruppale per nome e tipo: crea inline solo Agent o API Workflow scelti dall'utente e usa placeholder per le altre.",
       "Per brownfield usa edit mirati e pull dello stato server quando il case esiste gia in Studio Web.",
       "Valida e pubblica solo dopo aver verificato fasi, ruoli, variabili e binding."
     ],
@@ -306,7 +306,7 @@ const skills = [
       "Configura gruppi, campi, istruzioni di estrazione e preprocessing; poi verifica predizioni, metriche e versioni prima del publish.",
       "Per nodi IxP dentro `.flow`, passa invece a `uipath-maestro-flow`."
     ],
-    cli: ["uip ixp projects create", "uip ixp documents", "uip ixp groups", "uip ixp fields", "uip ixp labellings", "uip ixp projects list-models", "uip ixp projects publish"],
+    cli: ["uip ixp projects create", "uip ixp documents", "uip ixp groups", "uip ixp fields", "uip ixp labellings confirm --corrections", "uip ixp projects list-models", "uip ixp projects publish"],
     prompt: "Crea o aggiorna questo progetto IXP, configura tassonomia ed estrazione, rivedi le predizioni e prepara la versione corretta per il publish.",
     handoffs: ["uipath-maestro-flow", "uipath-troubleshoot", "uipath-platform"],
     caveat: "Non è la skill per modellare il Flow che usa IXP. Su nomi di progetto, documento o campo ambigui deve fermarsi e chiedere conferma."
@@ -328,7 +328,7 @@ const skills = [
       "Richiedi `--output json` e filtri server-side per risultati affidabili.",
       "Usala come skill di supporto quando RPA, Flow o Agent devono scoprire risorse tenant."
     ],
-    cli: ["uip login status", "uip or folders list", "uip or assets create", "uip df entities list", "uip df records query", "uip is connections list", "uip traces spans get"],
+    cli: ["uip login status", "uip or folders list", "uip or assets create", "uip df entities list", "uip df records query", "uip df records get", "uip is connections list", "uip traces spans get"],
     prompt: "Verifica login e tenant, trova la folder corretta, lista risorse Orchestrator e Data Fabric necessarie e restituisci i riferimenti da usare nel workflow.",
     handoffs: ["uipath-solution", "uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-agents", "uipath-test", "uipath-insights", "uipath-connector-builder", "uipath-troubleshoot"],
     caveat: "Il REST diretto è fallback. Per Data Fabric il reference dedicato va letto prima di qualunque comando `uip df`; per diagnosi causali usa `uipath-troubleshoot`."
@@ -407,9 +407,10 @@ const skills = [
     how: [
       "Usa layout e risorse già validate dalle skill di authoring.",
       "Fai eseguire pack/publish/deploy con output JSON e verifiche di ambiente.",
-      "Dopo modifiche alle risorse, refresh e ricrea package prima del deploy."
+      "Dopo modifiche alle risorse, refresh e ricrea package prima del deploy.",
+      "Per feed controllati, offline o air-gapped, passa un `NuGet.config` locale con `--nuget-sources-config-path` a restore e pack."
     ],
-    cli: ["uip solution init", "uip solution project add", "uip solution resource refresh", "uip solution pack", "uip solution publish", "uip solution deploy run"],
+    cli: ["uip solution init", "uip solution project add", "uip solution resource refresh", "uip solution restore --nuget-sources-config-path", "uip solution pack --nuget-sources-config-path", "uip solution publish", "uip solution deploy run"],
     prompt: "Prepara questa soluzione UiPath per il deploy: verifica progetti inclusi, refresh risorse, pack e dimmi il comando di publish/deploy.",
     handoffs: ["uipath-platform", "uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-agents", "uipath-coded-apps", "uipath-review", "uipath-troubleshoot"],
     caveat: "Non corregge automaticamente i workflow: se validate/build falliscono, torna alla skill di prodotto."
@@ -461,19 +462,20 @@ const skills = [
     phase: "operate",
     status: "preview",
     product: "Troubleshooting",
-    files: "logs, traces, incidents, project artifacts",
+    files: "logs, traces, incidents, uipath.json, app config",
     purpose: "Investiga in modo evidence-first la causa di errori, regressioni, fault, problemi runtime e comportamenti inattesi su qualunque prodotto o risorsa UiPath.",
     when: "Usala quando l'obiettivo principale è capire perché qualcosa è fallito, anche se la richiesta nomina direttamente Orchestrator, Flow, Agent, RPA o un'altra risorsa.",
     how: [
       "Parti dal segnale più forte e definisci sintomo, scope, ultimo stato noto funzionante e cambiamenti recenti.",
       "Scegli il playbook più vicino, raccogli la checklist di evidenze e segui il relativo decision tree.",
+      "Per Coded Apps, confronta `uipath.json` con l'External Application e usa i playbook dedicati per OAuth, 401/403, CORS, callback, form e deploy 404.",
       "Salva ogni risposta CLI grezza sotto la root dell'indagine e non ricostruire manualmente i file di evidenza se una redirezione fallisce.",
       "Formula ipotesi formali solo se non esiste un playbook adatto, le cause sono multiple o cross-domain, oppure le evidenze si contraddicono.",
       "Quando la causa è confermata, passa alla skill di prodotto per l'implementazione della correzione."
     ],
-    cli: ["uip or jobs logs", "uip traces spans get", "uip maestro flow incidents", "references/investigation_guide.md", "references/presenting.md"],
+    cli: ["uip or jobs logs", "uip traces spans get", "uip maestro flow incidents", "uip admin external-apps get", "references/investigation_guide.md", "references/presenting.md"],
     prompt: "Questo job UiPath è faulted: ancora l'indagine alle evidenze, segui il playbook appropriato e restituisci root cause, fix minimo e verifica.",
-    handoffs: ["uipath-platform", "uipath-insights", "uipath-rpa", "uipath-maestro-flow", "uipath-feedback"],
+    handoffs: ["uipath-platform", "uipath-admin", "uipath-coded-apps", "uipath-insights", "uipath-rpa", "uipath-maestro-flow", "uipath-feedback"],
     caveat: "Le operazioni platform note restano a `uipath-platform`; quando arrivano nuovi dati, l'indagine deve riancorarsi al segnale più forte invece di difendere l'ipotesi precedente."
   },
   {
@@ -521,6 +523,8 @@ const capabilityDetails = {
     "Aggiorna project context tramite discovery agent quando `.claude/rules/project-context.md` manca o diventa stale.",
     "Scopre e installa activity package, legge documentazione `.local/docs` e genera activity XAML partendo da default sicuri.",
     "Gestisce UI automation con Object Repository, target capture, selector placeholders e workflow multi-schermo.",
+    "Collega di default i target Object Repository tramite IdRef e usa l'embed solo per il riferimento che non si lascia collegare.",
+    "Preserva l'attributo `Version` delle attività UIA `N*`, usa `TextString` come output di `NGetText` e riacquisisce i target rimontati dalle interazioni.",
     "Centralizza error-handling, UIA-only boundaries e placeholder selector pattern per evitare stub che validano ma non automatizzano.",
     "Applica la validazione in due fasi: `validate` per ciascun file modificato e `build` per l'intero progetto; consulta le analyzer rules solo on demand.",
     "Supporta debug headless con breakpoint per attività, `debug state`, aggiornamento breakpoint e attesa di uno stato stabile prima di proseguire.",
@@ -551,7 +555,8 @@ const capabilityDetails = {
     "Modella case, stage, task, condizioni di ingresso/uscita, SLA, variabili globali e IO binding.",
     "Produce `tasks.md` e lavora per fasi: interview, planning, prototyping, implementation, validate, debug, publish.",
     "Usa recipe JSON per plugin specifici invece di inventare manualmente strutture di case plan.",
-    "Quando il registry è vuoto, può creare inline Agent o API Workflow solo dopo una scelta esplicita `Create` al gate.",
+    "Registra ogni risoluzione in `registry-resolved.json` con stage, task, tipo, cache, query, match completi, selezione e motivazione.",
+    "Raggruppa le risorse mancanti per nome e tipo e crea inline solo Agent o API Workflow selezionati; le altre restano placeholder espliciti.",
     "Valida e prepara pubblicazione di case management con attenzione a binding e regole di espressione."
   ],
   "uipath-agents": [
@@ -574,6 +579,7 @@ const capabilityDetails = {
     "Valida `action-schema.json`, gestisce input/output di Action Center e genera UI per approvazione o data entry.",
     "Usa SDK `@uipath/uipath-typescript` per Orchestrator, Data Fabric, Maestro, Action Center, agenti, governance, traces, feedback e pagination.",
     "Gestisce scope OAuth da `uipath.json`, scope `Apps.Read Apps.Write` per publish headless e sorgenti Insights/RTM prima di build o deploy.",
+    "Gestisce i campi Data Fabric `MULTILINE_MAX`: recupera il contenuto completo per ID, non persiste i marker di list/query e non li usa in filtri o sort.",
     "Esegue debug locale, build, pack, publish e deploy non interattivo con folder key per workspace personale, cartella esistente o nuova cartella e modalità dashboard standalone/governance.",
     "Supporta client setup, file sync e pattern per app con document tab o form complessi; nelle Action App evita `sdk.initialize()`."
   ],
@@ -619,6 +625,7 @@ const capabilityDetails = {
     "Crea progetti IXP con tassonomia suggerita da Autopilot, importata o vuota e gestisce upload, download e cancellazione dei documenti.",
     "Crea gruppi e campi tassonomici riusando i data type built-in, con istruzioni per campo e per estrazione complessiva.",
     "Configura modello e preprocessing, rivede predizioni, conferma o annulla conferme e marca i campi mancanti.",
+    "Corregge valori OCR illeggibili durante la conferma senza usare `--corrections` per ribaltare una predizione errata.",
     "Analizza metriche e versioni modello, quindi gestisce publish, tag e rollback.",
     "Chiede conferma sui nomi di entità ambigui invece di selezionare un target per supposizione.",
     "Instrada i nodi document extraction dentro `.flow` verso `uipath-maestro-flow`."
@@ -627,6 +634,7 @@ const capabilityDetails = {
     "Opera su UiPath Cloud, Orchestrator, Studio Web, Integration Service, Data Fabric, LLM Gateway, traces e licensing via `uip` CLI.",
     "Gestisce login, tenant, folder, assets, queues, queue items, buckets, files, libraries, webhooks, triggers, jobs e processes.",
     "Gestisce Data Fabric via `uip df`: entity schema, record CRUD, search/query, aggregazioni, choice set, file attachment, CSV import e folder scoping.",
+    "Gestisce `MULTILINE_MAX`: list/query restituiscono un marker, il contenuto completo richiede `records get`, e il campo non supporta filtri o ordinamento.",
     "Legge sempre il reference Data Fabric prima dei comandi `uip df`, inclusi upload, download e cancellazione degli attachment.",
     "Per Data Fabric rispetta preview/approval gate su schema, choice set e operazioni irreversibili, con `--folder-key` quando necessario.",
     "Scopre connector, connection, activity e trigger Integration Service per alimentare Flow, RPA e agenti.",
@@ -646,6 +654,7 @@ const capabilityDetails = {
   "uipath-governance": [
     "Crea policy AOps per bloccare, limitare o imporre feature in Studio, StudioX, Assistant, Robot, AI Trust Layer e Agent Builder.",
     "Analizza e applica compliance standards come ISO 42001 con posture analysis, piano e conferma esplicita.",
+    "Ritenta fino a tre volte i conflitti 409 temporanei dei compliance pack quando il server richiede di attendere 10 secondi.",
     "Crea Access ToolUsePolicy per controllare quando un workflow può invocarne un altro come tool.",
     "Filtra policy per tag, caller, actor, user o group, distinguendo layer prodotto e layer tool-use.",
     "Guida deploy, gestione, campionatura, effective-policy query e verifica delle policy.",
@@ -664,6 +673,7 @@ const capabilityDetails = {
     "Inizializza soluzioni, aggiunge o importa progetti e gestisce `.uipx`.",
     "Esegue resource refresh/add/remove/edit per rendere il deploy parametrico e ripetibile.",
     "Packa, pubblica, deploya, attiva e carica soluzioni verso UiPath.",
+    "Usa `--nuget-sources-config-path` su restore e pack per controllare i feed in ambienti offline, air-gapped o CI.",
     "Gestisce scenari complessi: risorse condivise cloud, riferimenti intra-solution, virtual resources e nomi uguali su folder diverse.",
     "Instrada errori di build o validate verso le skill di authoring invece di mascherarli nel deploy."
   ],
@@ -684,6 +694,7 @@ const capabilityDetails = {
   "uipath-troubleshoot": [
     "Ancora l'indagine al segnale più forte, definendo sintomo, scope, ultimo stato funzionante e cambiamenti recenti.",
     "Seleziona il playbook appropriato, raccoglie la checklist di evidenze e segue il decision tree prima di ampliare l'analisi.",
+    "Diagnostica Coded Web Apps e Action Apps con otto playbook per OAuth redirect/scope, 401/403, callback, form data, CORS e deploy 404.",
     "Conserva output CLI verbatim sotto la root dell'indagine e usa il fallback documentato quando il filtro esatto per nome di una queue restituisce HTTP 400.",
     "Usa ipotesi formali solo su trigger di escalation: nessun playbook adatto, cause multiple o cross-domain, oppure evidenze contraddittorie.",
     "Analizza log, trace, incident, job, queue, error code, runtime exception e storia configurativa.",

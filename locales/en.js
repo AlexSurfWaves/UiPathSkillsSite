@@ -34,8 +34,8 @@ window.uipathLocales.en = {
     skillCount: "Skills",
     commit: "Commit",
     localCli: "Local CLI",
-    snapshotDate: "July 15, 2026",
-    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.199.0. Manifest schema: 2. Full hash: ea3540a02f238ec995e215cfc085eaaed14c0cfb.",
+    snapshotDate: "July 17, 2026",
+    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.199.0. Manifest schema: 2. Full hash: 10697c1e547a53217923511e0bb1d9fd35dfdc11.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "From discovery to operations",
     when: "When to use it",
@@ -195,7 +195,7 @@ window.uipathLocales.en = {
       how: [
         "Open Codex in the root that contains `project.json`, so it can detect framework, dependencies, and workflows.",
         "Let Codex run `uip rpa validate` for individual files and `uip rpa build` at project level before declaring the work complete; list analyzer rules only when needed.",
-        "For UI automation, use UiPath Object Repository and target capture; avoid shortcuts through Playwright, Selenium, or the DOM.",
+        "For UI automation, use UiPath Object Repository and target capture; link references by default and use embedding only as a per-target fallback.",
         "In headless debug, use activity breakpoints and poll `debug state` until a stable state is reached before choosing the next action.",
         "For advanced UI issues, enable `--profiling` to collect per-activity timings and before/after execution screenshots."
       ],
@@ -207,6 +207,8 @@ window.uipathLocales.en = {
         "Refreshes project context through the discovery agent when `.claude/rules/project-context.md` is missing or stale.",
         "Discovers and installs activity packages, reads `.local/docs`, and generates activity XAML from safe defaults.",
         "Handles UI automation with Object Repository, target capture, selector placeholders, and multi-window workflows.",
+        "Links Object Repository targets by IdRef by default and embeds only the individual reference that cannot be linked.",
+        "Preserves the `Version` attribute on UIA `N*` activities, uses `TextString` as the `NGetText` output, and reacquires targets remounted by interactions.",
         "Centralizes error handling, UIA-only boundaries, and placeholder selector patterns to avoid stubs that validate but do not automate.",
         "Applies two-phase validation: `validate` for every changed file and `build` for the full project; analyzer-rule listing is on demand.",
         "Supports headless debug with activity breakpoints, `debug state`, breakpoint updates, and stable-state polling before continuing.",
@@ -266,7 +268,7 @@ window.uipathLocales.en = {
       how: [
         "Start from `sdd.md` when it exists; otherwise have Codex collect the minimum required information.",
         "For greenfield work, generate `tasks.md` and then `caseplan.json` through dedicated JSON recipes.",
-        "If the registry is empty, allow inline Agent or API Workflow creation only after the user explicitly chooses `Create` at the gate.",
+        "When registry resources are missing, group them by name and type: create only user-selected Agents or API Workflows inline and use placeholders for the rest.",
         "For brownfield work, use targeted edits and pull server state when the case already exists in Studio Web.",
         "Validate and publish only after stages, roles, variables, and bindings have been checked."
       ],
@@ -278,7 +280,8 @@ window.uipathLocales.en = {
         "Models cases, stages, tasks, entry/exit conditions, SLAs, global variables, and IO bindings.",
         "Produces `tasks.md` and works by phases: interview, planning, prototyping, implementation, validation, debug, and publish.",
         "Uses plugin-specific JSON recipes instead of manually inventing case plan structures.",
-        "When the registry is empty, can create an Agent or API Workflow inline only after an explicit `Create` choice at the gate.",
+        "Records each lookup in `registry-resolved.json` with stage, task, type, cache, query, complete matches, selection, and rationale.",
+        "Groups missing resources by name and type and creates only selected Agents or API Workflows inline; all others remain explicit placeholders.",
         "Validates and prepares case management publication with attention to bindings and expression rules."
       ]
     },
@@ -343,6 +346,7 @@ window.uipathLocales.en = {
         "Validates `action-schema.json`, handles Action Center input/output, and generates approval or data-entry UI.",
         "Uses the `@uipath/uipath-typescript` SDK for Orchestrator, Data Fabric, Maestro, Action Center, agents, governance, traces, feedback, and pagination.",
         "Manages OAuth scopes from `uipath.json`, `Apps.Read Apps.Write` scopes for headless publish, and Insights/RTM sources before build or deploy.",
+        "Handles Data Fabric `MULTILINE_MAX` fields safely: fetches full content by ID, never persists list/query markers, and excludes them from filters and sorting.",
         "Runs local debug, build, pack, publish, and non-interactive deploy with folder keys for personal, existing, or new folders plus standalone/governance dashboard modes.",
         "Supports client setup, file sync, and patterns for apps with document tabs or complex forms; avoids `sdk.initialize()` in Action Apps."
       ]
@@ -468,6 +472,7 @@ window.uipathLocales.en = {
         "Creates IXP projects from Autopilot-suggested, imported, or empty taxonomies and manages document upload, download, and deletion.",
         "Creates taxonomy groups and fields using built-in data types, with per-field and overall extraction instructions.",
         "Configures model and preprocessing, reviews predictions, confirms or unconfirms values, and marks missing fields.",
+        "Corrects OCR-garbled values during confirmation without using `--corrections` to overturn a wrong prediction.",
         "Inspects metrics and model versions, then manages publish, tags, and rollback.",
         "Asks for confirmation on ambiguous entity names instead of guessing the target.",
         "Routes document extraction nodes inside `.flow` to `uipath-maestro-flow`."
@@ -491,6 +496,7 @@ window.uipathLocales.en = {
         "Operates on UiPath Cloud, Orchestrator, Studio Web, Integration Service, Data Fabric, LLM Gateway, traces, and licensing through the `uip` CLI.",
         "Manages login, tenant, folders, assets, queues, queue items, buckets, files, libraries, webhooks, triggers, jobs, and processes.",
         "Manages Data Fabric through `uip df`: entity schema, record CRUD, search/query, aggregations, choice sets, file attachments, CSV import, and folder scoping.",
+        "Handles `MULTILINE_MAX`: list/query returns a marker, full content requires `records get`, and the field cannot be filtered or sorted.",
         "Always reads the Data Fabric reference before `uip df` commands, including attachment upload, download, and deletion.",
         "For Data Fabric, respects preview/approval gates for schema, choice sets, and irreversible operations, with `--folder-key` when needed.",
         "Discovers Integration Service connectors, connections, activities, and triggers for Flow, RPA, and agents.",
@@ -537,6 +543,7 @@ window.uipathLocales.en = {
         "Creates AOps policies to block, limit, or enforce features in Studio, StudioX, Assistant, Robot, AI Trust Layer, and Agent Builder.",
         "Creates Access ToolUsePolicy to control when one workflow can invoke another as a tool.",
         "Analyzes and applies compliance standards such as ISO 42001 with posture analysis, a plan, and explicit confirmation.",
+        "Retries transient compliance-pack 409 conflicts up to three times when the server requests a 10-second wait.",
         "Filters policies by tag, caller, actor, user, or group, distinguishing product layer from tool-use layer.",
         "Guides deployment, management, sampling, effective-policy queries, and policy verification.",
         "Helps avoid overly broad rules through disambiguation and dedicated planning."
@@ -573,7 +580,8 @@ window.uipathLocales.en = {
       how: [
         "Initialize the solution root and add/import the individual automation projects.",
         "Run resource refresh and inspect resources before packing.",
-        "Separate pack/publish from deploy/activate because the latter touches real tenant resources."
+        "Separate pack/publish from deploy/activate because the latter touches real tenant resources.",
+        "For controlled, offline, or air-gapped feeds, pass a local `NuGet.config` to restore and pack with `--nuget-sources-config-path`."
       ],
       prompt: "Package this UiPath Solution, refresh resources, validate the `.uipx`, and stop before deployment unless I confirm.",
       caveat: "Build or validation errors usually belong to the underlying project skill, not to Solution packaging.",
@@ -581,6 +589,7 @@ window.uipathLocales.en = {
         "Initializes solutions, adds or imports projects, and manages `.uipx` files.",
         "Runs resource refresh/add/remove/edit to make deployment parameterized and repeatable.",
         "Packs, publishes, deploys, activates, and uploads solutions to UiPath.",
+        "Uses `--nuget-sources-config-path` on restore and pack to control package feeds in offline, air-gapped, or CI environments.",
         "Handles complex scenarios: shared cloud resources, intra-solution references, virtual resources, and duplicate names across folders.",
         "Routes build or validation errors to authoring skills instead of hiding them in deployment."
       ]
@@ -633,6 +642,7 @@ window.uipathLocales.en = {
       how: [
         "Anchor on the strongest signal and define the symptom, scope, last known good state, and recent changes.",
         "Choose the closest playbook, gather its evidence checklist, and follow the decision tree.",
+        "For Coded Apps, compare `uipath.json` with the External Application and use dedicated playbooks for OAuth, 401/403, CORS, callback, forms, and deploy 404.",
         "Keep every raw CLI response rooted under the investigation directory; if capture redirection fails, rerun the command instead of reconstructing evidence by hand.",
         "Use formal hypotheses only when no playbook fits, causes are multiple or cross-domain, or evidence conflicts.",
         "Once the cause is confirmed, hand the implementation to the owning product skill."
@@ -642,6 +652,7 @@ window.uipathLocales.en = {
       capabilities: [
         "Anchors the investigation on the strongest signal, defining symptom, scope, last known good state, and recent changes.",
         "Selects the matching playbook, gathers its evidence checklist, and follows the decision tree before broadening the analysis.",
+        "Diagnoses Coded Web Apps and Action Apps with eight playbooks covering OAuth redirect/scope, 401/403, callback, form data, CORS, and deploy 404.",
         "Preserves verbatim CLI output under the investigation root and uses the documented fallback when an exact-name queue filter returns HTTP 400.",
         "Uses formal hypotheses only on escalation triggers: no matching playbook, multiple or cross-domain causes, or conflicting evidence.",
         "Analyzes logs, traces, incidents, jobs, queues, error codes, runtime exceptions, and configuration history.",
