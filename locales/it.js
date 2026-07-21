@@ -14,6 +14,7 @@ window.uipathLocales.it = {
     integrate: "Integra",
     deploy: "Deploy",
     operate: "Operate",
+    improve: "Test & improve",
     graphLink: "Knowledge graph",
     platformNav: "Platform",
     developersNav: "Developers",
@@ -21,21 +22,35 @@ window.uipathLocales.it = {
     codingAgents: "Coding agents",
     navigatorTitle: "Skills Navigator",
     sourceRepo: "Repository sorgente",
+    sourceOverview: "Skills overview",
+    sourceCatalog: "Skills catalog",
     repo: "Repository",
     navigator: "Navigator",
     catalogEyebrow: "Catalogo analizzato dal repository UiPath/skills",
     homeTitle: "Skills UiPath Platform per coding agents",
     homeIntro: "Esplora le skill che guidano discovery, progettazione, build, integrazione, deploy e operation delle automazioni UiPath.",
     installCommandLabel: "Installazione PowerShell",
-    installCommandIntro: "Esegui questo comando in PowerShell per installare uip CLI e skills UiPath.",
+    installCommandIntro: "Esegui questo comando in PowerShell per installare il CLI e le skill UiPath incluse.",
     copyInstallCommand: "Copia comando",
     copiedInstallCommand: "Comando copiato",
     skillVersion: "Versione skill analizzate",
     skillCount: "Skill",
     commit: "Commit",
     localCli: "CLI locale",
-    snapshotDate: "17 luglio 2026",
-    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.199.0. Schema manifest: 2. Hash completo: 10697c1e547a53217923511e0bb1d9fd35dfdc11.",
+    snapshotDate: "21 luglio 2026",
+    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.199.0. Schema manifest: 2. Hash completo: 087b27f85efe5f2c4422ae4a0df3df32ee6841d8.",
+    referencesEyebrow: "Materiale di riferimento",
+    referencesTitle: "Tre fonti, tre ruoli distinti",
+    referencesIntro: "Il repository definisce il catalogo corrente; la documentazione ufficiale spiega il modello mentale e offre una vista lifecycle con prompt di esempio.",
+    referenceCurrent: "Fonte corrente",
+    referenceConcepts: "Concetti",
+    referenceSnapshot: "Vista ufficiale",
+    referenceRepoTitle: "UiPath skills repository",
+    referenceRepoText: "Fonte di verità per elenco, istruzioni, risorse e modifiche più recenti delle skill.",
+    referenceOverviewTitle: "Skills overview",
+    referenceOverviewText: "Definisce cosa contiene una skill, come viene selezionata dal coding agent e come indirizzarla esplicitamente.",
+    referenceCatalogTitle: "Skills catalog",
+    referenceCatalogText: "Raggruppa le skill per fase del lifecycle e fornisce prompt di esempio; è una snapshot rispetto al repository.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "Dalla discovery all'operatività",
     when: "Quando usarla",
@@ -84,7 +99,8 @@ window.uipathLocales.it = {
     build: "Build",
     integrate: "Integra",
     deploy: "Deploy",
-    operate: "Operate"
+    operate: "Operate",
+    improve: "Test & improve"
   },
   status: {
     stable: "Stable",
@@ -110,14 +126,18 @@ window.uipathLocales.it = {
     },
     operate: {
       title: "5. Operate",
-      text: "Tenant, Orchestrator, task runtime, Insights, test e run."
+      text: "Tenant, Orchestrator, task runtime, Insights e run."
     },
     improve: {
-      title: "6. Improve",
-      text: "Review, governance, troubleshooting e feedback."
+      title: "6. Test & Improve",
+      text: "Test, review, governance, troubleshooting e feedback."
     }
   },
   guides: [
+    {
+      title: "Selezione automatica, conferma esplicita",
+      text: "Il coding agent sceglie la skill dal task, ma la selezione non è garantita. Per lavori critici, nomina la skill nel prompt e chiedi di confermare che sia stata caricata."
+    },
     {
       title: "Codex app come cockpit",
       text: "Apri Codex direttamente nella root del progetto UiPath o della soluzione. Così può leggere `project.json`, `.flow`, `agent.json`, `sdd.md`, dipendenze e diff locali prima di agire."

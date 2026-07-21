@@ -368,6 +368,7 @@ h3 {
 .top-band,
 .lifecycle-band,
 .detail-band,
+.references-band,
 .guide-band {
   padding: 34px clamp(22px, 4vw, 58px);
 }
@@ -620,6 +621,70 @@ h3 {
   background: #fff4ef;
   font-weight: 750;
   text-decoration: none;
+}
+
+.source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.references-band {
+  border-bottom: 1px solid var(--line);
+  background: #f7f9fa;
+}
+
+.references-heading {
+  max-width: 920px;
+}
+
+.references-heading > p:last-child {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.reference-card {
+  min-height: 188px;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--orange);
+  padding: 20px;
+  background: #ffffff;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.reference-card:hover,
+.reference-card:focus {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.reference-card:focus {
+  outline: 3px solid rgba(255, 90, 31, 0.22);
+  outline-offset: 2px;
+}
+
+.reference-card h3 {
+  margin: 8px 0 10px;
+}
+
+.reference-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.reference-kicker {
+  color: #9d310b;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .source-note {
@@ -1460,6 +1525,10 @@ h3 {
   background: #12a87f;
 }
 
+.legend-dot.improve {
+  background: #b33d74;
+}
+
 @media (max-width: 1180px) {
   .site-header {
     align-items: flex-start;
@@ -1485,6 +1554,7 @@ h3 {
   }
 
   .lifecycle-grid,
+  .reference-grid,
   .guide-grid {
     grid-template-columns: repeat(2, minmax(220px, 1fr));
   }
@@ -1586,6 +1656,7 @@ h3 {
   .top-band,
   .lifecycle-band,
   .detail-band,
+  .references-band,
   .guide-band {
     padding: 26px 16px;
   }
@@ -1630,6 +1701,7 @@ h3 {
 
   .skill-list,
   .lifecycle-grid,
+  .reference-grid,
   .guide-grid {
     grid-template-columns: 1fr;
   }

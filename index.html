@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>UiPath Skills Navigator per Codex</title>
-    <link rel="stylesheet" href="./styles.css?v=10697c1e">
+    <link rel="stylesheet" href="./styles.css?v=087b27f85">
   </head>
   <body>
     <header class="site-header">
@@ -40,6 +40,7 @@
           <button class="filter-chip" data-filter="integrate" type="button" data-i18n="ui.integrate">Integra</button>
           <button class="filter-chip" data-filter="deploy" type="button" data-i18n="ui.deploy">Deploy</button>
           <button class="filter-chip" data-filter="operate" type="button" data-i18n="ui.operate">Operate</button>
+          <button class="filter-chip" data-filter="improve" type="button" data-i18n="ui.improve">Test &amp; improve</button>
         </div>
 
         <a class="sidebar-link" href="./graph.html" data-i18n="ui.graphLink">Knowledge graph</a>
@@ -61,7 +62,7 @@
             <div class="version-strip" aria-label="Versione skill analizzate">
               <span data-i18n="ui.skillVersion">Versione skill analizzate</span>
               <strong id="skillsVersion">1.199.0</strong>
-              <small>Target CLI <code>^1.199.0</code> · commit <code>10697c1e</code> · <span data-i18n="ui.snapshotDate">17 luglio 2026</span></small>
+              <small>Target CLI <code>^1.199.0</code> · commit <code>087b27f85</code> · <span data-i18n="ui.snapshotDate">21 luglio 2026</span></small>
             </div>
             <dl>
               <div>
@@ -70,19 +71,23 @@
               </div>
               <div>
                 <dt data-i18n="ui.commit">Commit</dt>
-                <dd>10697c1e</dd>
+                <dd>087b27f85</dd>
               </div>
               <div>
                 <dt data-i18n="ui.localCli">CLI locale</dt>
                 <dd>uip 1.197.1</dd>
               </div>
             </dl>
-            <a class="source-link" href="https://github.com/UiPath/skills/tree/main/skills" data-i18n="ui.sourceRepo">Repository sorgente</a>
-            <p class="source-note" data-i18n="ui.sourceNote">Versione letta da <code>version-manifest.json</code>. Snapshot repository: <code>1.199.0</code>. Schema manifest: <code>2</code>. Hash completo: <code>10697c1e547a53217923511e0bb1d9fd35dfdc11</code>.</p>
+            <div class="source-links">
+              <a class="source-link" href="https://github.com/UiPath/skills/tree/main/skills" target="_blank" rel="noopener" data-i18n="ui.sourceRepo">Repository sorgente</a>
+              <a class="source-link" href="https://docs.uipath.com/coding-agents/standalone/latest/user-guide/skills-overview" target="_blank" rel="noopener" data-i18n="ui.sourceOverview">Skills overview</a>
+              <a class="source-link" href="https://docs.uipath.com/coding-agents/standalone/latest/user-guide/skills-catalog" target="_blank" rel="noopener" data-i18n="ui.sourceCatalog">Skills catalog</a>
+            </div>
+            <p class="source-note" data-i18n="ui.sourceNote">Versione letta da <code>version-manifest.json</code>. Snapshot repository: <code>1.199.0</code>. Schema manifest: <code>2</code>. Hash completo: <code>087b27f85efe5f2c4422ae4a0df3df32ee6841d8</code>.</p>
           </div>
           <div class="install-callout" aria-labelledby="installCommandTitle">
             <p id="installCommandTitle" class="install-label" data-i18n="ui.installCommandLabel">Installazione PowerShell</p>
-            <p class="install-description" data-i18n="ui.installCommandIntro">Esegui questo comando in PowerShell per installare uip CLI e skills UiPath.</p>
+            <p class="install-description" data-i18n="ui.installCommandIntro">Esegui questo comando in PowerShell per installare il CLI e le skill UiPath incluse.</p>
             <div class="install-command-row">
               <code id="installCommand" class="install-command">irm https://download.uipath.com/uipath-cli/install.ps1 | iex</code>
               <button class="copy-command-button" type="button" data-copy-install-command data-copy-target="installCommand" data-i18n-aria="ui.copyInstallCommand" data-i18n-title="ui.copyInstallCommand" aria-label="Copia comando" title="Copia comando">
@@ -90,6 +95,31 @@
                 <span class="visually-hidden" data-i18n="ui.copyInstallCommand">Copia comando</span>
               </button>
             </div>
+          </div>
+        </section>
+
+        <section class="references-band" aria-labelledby="referencesTitle">
+          <div class="band-heading references-heading">
+            <p class="eyebrow" data-i18n="ui.referencesEyebrow">Materiale di riferimento</p>
+            <h2 id="referencesTitle" data-i18n="ui.referencesTitle">Tre fonti, tre ruoli distinti</h2>
+            <p data-i18n="ui.referencesIntro">Il repository definisce il catalogo corrente; la documentazione ufficiale spiega il modello mentale e offre una vista lifecycle con prompt di esempio.</p>
+          </div>
+          <div class="reference-grid">
+            <a class="reference-card" href="https://github.com/UiPath/skills/tree/main/skills" target="_blank" rel="noopener">
+              <span class="reference-kicker" data-i18n="ui.referenceCurrent">Fonte corrente</span>
+              <h3 data-i18n="ui.referenceRepoTitle">UiPath skills repository</h3>
+              <p data-i18n="ui.referenceRepoText">Fonte di verità per elenco, istruzioni, risorse e modifiche più recenti delle skill.</p>
+            </a>
+            <a class="reference-card" href="https://docs.uipath.com/coding-agents/standalone/latest/user-guide/skills-overview" target="_blank" rel="noopener">
+              <span class="reference-kicker" data-i18n="ui.referenceConcepts">Concetti</span>
+              <h3 data-i18n="ui.referenceOverviewTitle">Skills overview</h3>
+              <p data-i18n="ui.referenceOverviewText">Definisce cosa contiene una skill, come viene selezionata dal coding agent e come indirizzarla esplicitamente.</p>
+            </a>
+            <a class="reference-card" href="https://docs.uipath.com/coding-agents/standalone/latest/user-guide/skills-catalog" target="_blank" rel="noopener">
+              <span class="reference-kicker" data-i18n="ui.referenceSnapshot">Vista ufficiale</span>
+              <h3 data-i18n="ui.referenceCatalogTitle">Skills catalog</h3>
+              <p data-i18n="ui.referenceCatalogText">Raggruppa le skill per fase del lifecycle e fornisce prompt di esempio; è una snapshot rispetto al repository.</p>
+            </a>
           </div>
         </section>
 
@@ -171,8 +201,8 @@
       </main>
     </div>
 
-    <script src="./app.js?v=10697c1e"></script>
-    <script src="./locales/languages.js?v=10697c1e"></script>
-    <script src="./i18n.js?v=10697c1e"></script>
+    <script src="./app.js?v=087b27f85"></script>
+    <script src="./locales/languages.js?v=087b27f85"></script>
+    <script src="./i18n.js?v=087b27f85"></script>
   </body>
 </html>

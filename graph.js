@@ -13,20 +13,22 @@
 
   const width = 1220;
   const height = 760;
-  const phaseOrder = ["design", "build", "integrate", "deploy", "operate"];
+  const phaseOrder = ["design", "build", "integrate", "deploy", "operate", "improve"];
   const phaseColors = {
     design: "#111820",
     build: "#fa4616",
     integrate: "#2a9dad",
     deploy: "#7f56d9",
-    operate: "#3f4e56"
+    operate: "#3f4e56",
+    improve: "#b33d74"
   };
   const phaseLabels = {
     design: "Design",
     build: "Build",
     integrate: "Integra",
     deploy: "Deploy",
-    operate: "Operate"
+    operate: "Operate",
+    improve: "Test & improve"
   };
 
   function translator() {
