@@ -24,6 +24,7 @@ window.uipathLocales.en = {
     sourceRepo: "Source repository",
     sourceOverview: "Skills overview",
     sourceCatalog: "Skills catalog",
+    sourceBestPractices: "Best practices",
     repo: "Repository",
     navigator: "Navigator",
     catalogEyebrow: "Catalog analyzed from the UiPath/skills repository",
@@ -37,11 +38,11 @@ window.uipathLocales.en = {
     skillCount: "Skills",
     commit: "Commit",
     localCli: "Local CLI",
-    snapshotDate: "July 21, 2026",
-    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.199.0. Manifest schema: 2. Full hash: 087b27f85efe5f2c4422ae4a0df3df32ee6841d8.",
+    snapshotDate: "July 22, 2026",
+    sourceNote: "Version read from version-manifest.json. Repository snapshot: 1.199.0. Manifest schema: 2. Full hash: eefe56761c18a9781496897176eb6ae1a9581aae.",
     referencesEyebrow: "Reference material",
-    referencesTitle: "Three sources with distinct roles",
-    referencesIntro: "The repository defines the current catalog; the official documentation explains the mental model and provides a lifecycle view with example prompts.",
+    referencesTitle: "Sources with distinct roles",
+    referencesIntro: "The repository defines the current state; the overview and catalog describe skills, while the best-practice pages guide context, collaboration, and validation.",
     referenceCurrent: "Current source",
     referenceConcepts: "Concepts",
     referenceSnapshot: "Official view",
@@ -51,6 +52,9 @@ window.uipathLocales.en = {
     referenceOverviewText: "Explains what a skill contains, how a coding agent selects it, and how to steer selection explicitly.",
     referenceCatalogTitle: "Skills catalog",
     referenceCatalogText: "Groups skills by lifecycle stage and provides example prompts; it is a snapshot of the repository.",
+    referencePractice: "Best practices",
+    referencePracticeTitle: "Working effectively",
+    referencePracticeText: "Defines the operating loop: focused context, a plan, short iterations, UiPath validation, and human control.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "From discovery to operations",
     when: "When to use it",
@@ -61,8 +65,19 @@ window.uipathLocales.en = {
     prompt: "Effective prompt",
     handoffs: "Natural handoffs",
     caveat: "Watch out",
-    guideEyebrow: "Operational guidance",
-    guideTitle: "How to maximize coding agents with UiPath skills",
+    guideEyebrow: "Operating workflow",
+    guideTitle: "How to work effectively with coding agents and UiPath skills",
+    guideIntro: "Treat the coding agent as a fast collaborator: you set the architecture and controls, the skill provides the method, and UiPath tools provide the evidence.",
+    flowAria: "Recommended workflow for coding agents and UiPath skills",
+    decision: "Decision",
+    iterationGateTitle: "Does the result pass the end-to-end criteria?",
+    guideHabitsEyebrow: "Checklist",
+    guideHabitsTitle: "Six habits that raise quality",
+    guideSourcesAria: "Official best-practice sources",
+    guideSourcesLabel: "Read more in the official guides:",
+    sourceWorkingEffectively: "Working effectively",
+    sourceProjectContext: "Project context",
+    sourceReviewValidation: "Review & validation",
     graphEyebrow: "Skill relationships",
     graphTitle: "Navigable graph of UiPath skills",
     graphIntro: "Each node is a skill. Lines show the handoffs and sub-skills Codex uses when one capability needs to delegate to another. Hover a node to read what the skill does; drag nodes to improve graph readability.",
@@ -133,34 +148,70 @@ window.uipathLocales.en = {
       text: "Testing, review, governance, troubleshooting, and feedback."
     }
   },
+  developerFlow: [
+    {
+      title: "Frame the outcome",
+      text: "Define the exact artifact and path, typed inputs and outputs, end-to-end behavior, constraints, and acceptance criteria."
+    },
+    {
+      title: "Load useful context",
+      text: "Start a fresh session for the task and provide only current, relevant files, project conventions, and sanitized PDDs or SDDs."
+    },
+    {
+      title: "Select the skill",
+      text: "Name the `uipath-*` skill for critical work and ask the coding agent to confirm that it loaded."
+    },
+    {
+      title: "Align plan and checkpoints",
+      text: "For non-trivial work, make the plan, dependencies, and approval points explicit before edits; request review-first when a skill normally proceeds automatically."
+    },
+    {
+      title: "Build one increment",
+      text: "Generate a meaningful but testable slice, keeping work in native activities and the correct UiPath project structure."
+    },
+    {
+      title: "Verify with UiPath",
+      text: "Run Workflow Analyzer, build the whole project, and perform a controlled local run; then compare the actual files with the acceptance criteria."
+    }
+  ],
+  iterationPaths: [
+    {
+      title: "Pass",
+      text: "Inspect the actual files, not only the summary, then separately approve publish, deploy, or other changes to shared systems."
+    },
+    {
+      title: "Localized gap",
+      text: "Correct it and repeat build plus verification. Two or three generate-check-refine cycles are usually enough."
+    },
+    {
+      title: "Wrong structure or repeated failures",
+      text: "Stop patching and restart in a fresh session with corrected context, plan, or prompt contract."
+    }
+  ],
   guides: [
     {
-      title: "Automatic selection, explicit confirmation",
-      text: "The coding agent selects a skill from the task, but selection is not guaranteed. For critical work, name the skill in your prompt and ask the agent to confirm it loaded."
+      title: "You remain the architect",
+      text: "Use the coding agent as a fast collaborator: set direction and trade-offs, judge the output, and keep actions that change shared state under explicit approval."
     },
     {
-      title: "Codex app as cockpit",
-      text: "Open Codex directly in the UiPath project or solution root. It can read `project.json`, `.flow`, `agent.json`, `sdd.md`, dependencies, and local diffs before acting."
+      title: "Persistent, short, current context",
+      text: "Keep an `AGENTS.md` with preferred skills, quality rules, pinned packages, activities to favor or avoid, and files that must not be overwritten."
     },
     {
-      title: "CLI as operating engine",
-      text: "The `uip` CLI is the best way to validate, build, discover tenant resources, publish, and diagnose. Codex orchestrates it, interprets JSON, and updates files."
+      title: "The prompt is a delivery contract",
+      text: "Specify the file and location, typed inputs and outputs, complete behavior, constraints, dependencies, and how the result will be verified."
     },
     {
-      title: "Prompt with artifact and outcome",
-      text: "Use requests such as: 'in the open project, change X, validate with Y, and do not run anything with real effects without confirmation.' It works far better than a generic brief."
+      title: "Relevant context, not more context",
+      text: "Every session starts fresh: use one session per task, attach only the necessary sources, and remove real customer data while preserving structure and edge cases."
     },
     {
-      title: "Design before build",
-      text: "For non-trivial automations, start with `uipath-automation-discovery` when the target is unclear, then use `uipath-planner` for the SDD and plan."
+      title: "Validation before trust",
+      text: "Look for TODOs or placeholders, wrong activities, removed selectors, unpinned packages, and missing logging or error handling; validate the whole project, not only the changed file."
     },
     {
-      title: "Validate is not run",
-      text: "Ask for validate/build every time; authorize debug/run only when you accept real effects on systems, email, tickets, queues, or open applications."
-    },
-    {
-      title: "Review as a quality gate",
-      text: "Before deployment, run a read-only `uipath-review`. Then ask the relevant product skill to fix only the prioritized findings."
+      title: "Secrets and state changes stay controlled",
+      text: "Keep secrets in assets or a credential store, reference them by name, and require explicit confirmation before real-effect runs, publishing, deployment, or package upgrades."
     }
   ],
   skills: {
@@ -288,7 +339,8 @@ window.uipathLocales.en = {
       when: "Use it for case-centric solutions where work evolves through states, human activities, rules, and case data.",
       how: [
         "Start from `sdd.md` when it exists; otherwise have Codex collect the minimum required information.",
-        "For greenfield work, generate `tasks.md` and then `caseplan.json` through dedicated JSON recipes.",
+        "At kickoff, make the phases and decision checkpoints explicit so it is clear when review, debug, and publish choices will be requested.",
+        "For greenfield work, generate `tasks.md` and then `caseplan.json` through dedicated JSON recipes; explicitly request review-first mode when you want to stop on the plan before building.",
         "Keep `caseplan.json` and `bindings_v2.json` in parity before validation, and avoid colons in stage and SLA names.",
         "When registry resources are missing, group them by name and type: create only user-selected Agents or API Workflows inline and use placeholders for the rest.",
         "For brownfield work, use targeted edits and pull server state when the case already exists in Studio Web.",
@@ -300,7 +352,8 @@ window.uipathLocales.en = {
         "Creates `caseplan.json` from an SDD or through a guided interview when no design exists, without rejecting complex cases by a fixed threshold.",
         "Edits existing caseplans through a targeted brownfield path without regenerating the full plan when only one change is needed.",
         "Models cases, stages, tasks, entry/exit conditions, SLAs, global variables, and IO bindings.",
-        "Produces `tasks.md` and works by phases: interview, planning, prototyping, implementation, validation, debug, and publish.",
+        "Presents the flow and checkpoints at kickoff, produces `tasks.md`, and works by phases: interview, planning, prototyping, implementation, validation, debug, and publish.",
+        "Normally proceeds from `tasks.md` to prototyping; it stops for plan review when the user explicitly requests plan-only or review-first mode.",
         "Uses plugin-specific JSON recipes instead of manually inventing case plan structures.",
         "Records each lookup in `registry-resolved.json` with stage, task, type, cache, query, complete matches, selection, and rationale.",
         "Groups missing resources by name and type and creates only selected Agents or API Workflows inline; all others remain explicit placeholders.",
@@ -667,11 +720,12 @@ window.uipathLocales.en = {
     "uipath-troubleshoot": {
       category: "Support",
       product: "Diagnostics and RCA",
-      purpose: "Runs evidence-first causal investigations of errors, regressions, faults, runtime problems, and unexpected behavior across any UiPath product or resource.",
-      when: "Use it when the primary outcome is understanding why something failed, even if the request directly names Orchestrator, Flow, Agent, RPA, or another resource.",
+      purpose: "Runs evidence-first causal investigations of errors, regressions, faults, runtime problems, and unexpected behavior across UiPath products, activity packages, and UiPath Assistant.",
+      when: "Use it when the primary outcome is understanding why something failed, even if the request names Orchestrator, Flow, Agent, RPA, an activity package, or shares a UiPath Assistant diagnostic archive.",
       how: [
         "Anchor on the strongest signal and define the symptom, scope, last known good state, and recent changes.",
         "Read the investigation guides first, then choose the closest playbook and use only documented commands to collect correlated evidence.",
+        "For UiPath Assistant, start from the ExportDiagnoseArchive bundle and correlate `combined.log` with `Robot.log` before proposing a fix.",
         "For Coded Apps, compare `uipath.json` with the External Application and use dedicated playbooks for OAuth, 401/403, CORS, callback, forms, and deploy 404.",
         "Keep every raw CLI response rooted under the investigation directory; if capture redirection fails, rerun the command instead of reconstructing evidence by hand.",
         "Use formal hypotheses only when no playbook fits, causes are multiple or cross-domain, or evidence conflicts.",
@@ -682,7 +736,7 @@ window.uipathLocales.en = {
       capabilities: [
         "Anchors the investigation on the strongest signal, defining symptom, scope, last known good state, and recent changes.",
         "Reads the generic and domain investigation guides before commands, then follows the matching playbook and its exact documented command forms.",
-        "Diagnoses API Workflows, Studio, Jira, CSV, file operations, Python, UI Automation, Coded Apps, Action Apps, and agent runtime failures through dedicated playbooks.",
+        "Diagnoses API Workflows, Studio, UiPath Assistant, Jira, OCR and Document Understanding, PDF, IPC, SAP BAPI, Slack, Terminal, System, UI Automation, Coded Apps, Action Apps, and agent runtime failures through dedicated playbooks.",
         "Preserves verbatim CLI output under the investigation root and uses the documented fallback when an exact-name queue filter returns HTTP 400.",
         "Uses formal hypotheses only on escalation triggers: no matching playbook, multiple or cross-domain causes, or conflicting evidence.",
         "Analyzes logs, traces, incidents, jobs, queues, error codes, runtime exceptions, and configuration history.",

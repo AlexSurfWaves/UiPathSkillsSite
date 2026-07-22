@@ -149,6 +149,18 @@ const i18n = (() => {
     return { ...item, title: translated.title, text: translated.text };
   }
 
+  function localizeDeveloperFlow(item, index) {
+    const translated = dictionary().developerFlow?.[index];
+    if (!translated) return item;
+    return { ...item, title: translated.title, text: translated.text };
+  }
+
+  function localizeIterationPath(item, index) {
+    const translated = dictionary().iterationPaths?.[index];
+    if (!translated) return item;
+    return { ...item, title: translated.title, text: translated.text };
+  }
+
   async function init() {
     await loadLocale(defaultLanguage);
     await setLanguage(currentLanguage, { persist: false });
@@ -169,7 +181,9 @@ const i18n = (() => {
     statusLabel,
     localizeSkill,
     localizeLifecycle,
-    localizeGuide
+    localizeGuide,
+    localizeDeveloperFlow,
+    localizeIterationPath
   };
 })();
 

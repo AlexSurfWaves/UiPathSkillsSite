@@ -24,6 +24,7 @@ window.uipathLocales.it = {
     sourceRepo: "Repository sorgente",
     sourceOverview: "Skills overview",
     sourceCatalog: "Skills catalog",
+    sourceBestPractices: "Best practice",
     repo: "Repository",
     navigator: "Navigator",
     catalogEyebrow: "Catalogo analizzato dal repository UiPath/skills",
@@ -37,11 +38,11 @@ window.uipathLocales.it = {
     skillCount: "Skill",
     commit: "Commit",
     localCli: "CLI locale",
-    snapshotDate: "21 luglio 2026",
-    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.199.0. Schema manifest: 2. Hash completo: 087b27f85efe5f2c4422ae4a0df3df32ee6841d8.",
+    snapshotDate: "22 luglio 2026",
+    sourceNote: "Versione letta da version-manifest.json. Snapshot repository: 1.199.0. Schema manifest: 2. Hash completo: eefe56761c18a9781496897176eb6ae1a9581aae.",
     referencesEyebrow: "Materiale di riferimento",
-    referencesTitle: "Tre fonti, tre ruoli distinti",
-    referencesIntro: "Il repository definisce il catalogo corrente; la documentazione ufficiale spiega il modello mentale e offre una vista lifecycle con prompt di esempio.",
+    referencesTitle: "Fonti con ruoli distinti",
+    referencesIntro: "Il repository definisce lo stato corrente; overview e catalog descrivono le skill, mentre le best practice guidano contesto, collaborazione e validazione.",
     referenceCurrent: "Fonte corrente",
     referenceConcepts: "Concetti",
     referenceSnapshot: "Vista ufficiale",
@@ -51,6 +52,9 @@ window.uipathLocales.it = {
     referenceOverviewText: "Definisce cosa contiene una skill, come viene selezionata dal coding agent e come indirizzarla esplicitamente.",
     referenceCatalogTitle: "Skills catalog",
     referenceCatalogText: "Raggruppa le skill per fase del lifecycle e fornisce prompt di esempio; è una snapshot rispetto al repository.",
+    referencePractice: "Best practice",
+    referencePracticeTitle: "Working effectively",
+    referencePracticeText: "Definisce il ciclo operativo: contesto mirato, piano, iterazioni brevi, validazione UiPath e controllo umano.",
     lifecycleEyebrow: "Lifecycle",
     lifecycleTitle: "Dalla discovery all'operatività",
     when: "Quando usarla",
@@ -61,8 +65,19 @@ window.uipathLocales.it = {
     prompt: "Prompt efficace",
     handoffs: "Handoff naturali",
     caveat: "Attenzione",
-    guideEyebrow: "Consigli operativi",
-    guideTitle: "Come massimizzare i coding agents sulle skill UiPath",
+    guideEyebrow: "Workflow operativo",
+    guideTitle: "Come lavorare bene con coding agents e skill UiPath",
+    guideIntro: "Tratta il coding agent come un collaboratore veloce: tu imposti architettura e controlli, la skill fornisce il metodo, gli strumenti UiPath forniscono le prove.",
+    flowAria: "Workflow consigliato per coding agents e skill UiPath",
+    decision: "Decisione",
+    iterationGateTitle: "Il risultato passa i criteri end-to-end?",
+    guideHabitsEyebrow: "Checklist",
+    guideHabitsTitle: "Sei abitudini che alzano la qualità",
+    guideSourcesAria: "Fonti ufficiali delle best practice",
+    guideSourcesLabel: "Approfondisci nelle guide ufficiali:",
+    sourceWorkingEffectively: "Working effectively",
+    sourceProjectContext: "Project context",
+    sourceReviewValidation: "Review & validation",
     graphEyebrow: "Relazioni tra skill",
     graphTitle: "Grafo navigabile delle skill UiPath",
     graphIntro: "Ogni nodo è una skill. Le linee mostrano gli handoff/sub-skill che Codex usa quando una competenza deve delegare a un'altra. Passa il mouse su un nodo per leggere cosa fa la skill; trascina i nodi per migliorare la leggibilità del grafo.",
@@ -133,34 +148,70 @@ window.uipathLocales.it = {
       text: "Test, review, governance, troubleshooting e feedback."
     }
   },
+  developerFlow: [
+    {
+      title: "Inquadra il risultato",
+      text: "Definisci artefatto e percorso esatti, input/output con tipi, comportamento end-to-end, vincoli e criteri di accettazione."
+    },
+    {
+      title: "Carica il contesto utile",
+      text: "Avvia una sessione fresca per il task e fornisci solo file aggiornati e rilevanti, convenzioni di progetto e PDD/SDD sanitizzati."
+    },
+    {
+      title: "Seleziona la skill",
+      text: "Nomina la skill `uipath-*` quando il task è critico e chiedi al coding agent di confermare che sia stata caricata."
+    },
+    {
+      title: "Allinea piano e checkpoint",
+      text: "Per lavori non banali, fai esplicitare piano, dipendenze e punti di approvazione prima delle modifiche; chiedi review-first se la skill procede automaticamente."
+    },
+    {
+      title: "Costruisci un incremento",
+      text: "Genera una porzione significativa ma verificabile, mantenendo il lavoro nelle attività native e nella struttura UiPath corretta."
+    },
+    {
+      title: "Verifica con UiPath",
+      text: "Esegui Workflow Analyzer, build dell'intero progetto e run locale controllato; poi confronta i file reali con i criteri di accettazione."
+    }
+  ],
+  iterationPaths: [
+    {
+      title: "Passa",
+      text: "Esamina i file effettivi, non solo il riepilogo, quindi approva separatamente publish, deploy o altre modifiche a sistemi condivisi."
+    },
+    {
+      title: "Gap localizzato",
+      text: "Correggi e ripeti build + verifica. In genere bastano 2–3 cicli generate-check-refine."
+    },
+    {
+      title: "Struttura errata o errori ripetuti",
+      text: "Interrompi la catena di patch: riparti in una sessione fresca con contesto, piano o contratto del prompt corretti."
+    }
+  ],
   guides: [
     {
-      title: "Selezione automatica, conferma esplicita",
-      text: "Il coding agent sceglie la skill dal task, ma la selezione non è garantita. Per lavori critici, nomina la skill nel prompt e chiedi di confermare che sia stata caricata."
+      title: "Tu resti l'architetto",
+      text: "Usa il coding agent come collaboratore veloce: definisci direzione e trade-off, giudica l'output e mantieni sotto approvazione le azioni che cambiano stato condiviso."
     },
     {
-      title: "Codex app come cockpit",
-      text: "Apri Codex direttamente nella root del progetto UiPath o della soluzione. Così può leggere `project.json`, `.flow`, `agent.json`, `sdd.md`, dipendenze e diff locali prima di agire."
+      title: "Contesto persistente, breve e corrente",
+      text: "Mantieni un `AGENTS.md` con skill preferite, regole di qualità, package fissati, attività da preferire o evitare e file che non devono essere sovrascritti."
     },
     {
-      title: "CLI come motore operativo",
-      text: "Il `uip` CLI è il modo migliore per validare, buildare, cercare risorse tenant, pubblicare e diagnosticare. Codex lo orchestra, interpreta JSON e aggiorna i file."
+      title: "Il prompt è un contratto di consegna",
+      text: "Specifica file e posizione, input/output e tipi, comportamento completo, vincoli, dipendenze e come sarà verificato il risultato."
     },
     {
-      title: "Prompt con artefatto e outcome",
-      text: "Scrivi richieste tipo: 'nel progetto aperto, modifica X, valida con Y, non eseguire run con effetti reali senza conferma'. È molto più efficace di un brief generico."
+      title: "Contesto rilevante, non più contesto",
+      text: "Ogni sessione parte da zero: usa una sessione per task, allega solo le fonti necessarie e rimuovi dati reali di clienti mantenendo struttura e casi limite."
     },
     {
-      title: "Design prima del build",
-      text: "Per automazioni non banali, parti da `uipath-automation-discovery` quando il cosa automatizzare non è chiaro, poi usa `uipath-planner` per SDD e piano."
+      title: "Validazione prima della fiducia",
+      text: "Cerca TODO o placeholder, attività sbagliate, selector rimossi, package non fissati, logging ed error handling mancanti; valida l'intero progetto, non solo il file modificato."
     },
     {
-      title: "Validate è diverso da run",
-      text: "Chiedi validate/build sempre; autorizza debug/run solo quando accetti effetti reali su sistemi, email, ticket, code o applicazioni aperte."
-    },
-    {
-      title: "Review come quality gate",
-      text: "Prima del deploy fai una `uipath-review` read-only. Poi chiedi alla skill specifica di correggere solo i finding prioritari."
+      title: "Segreti e cambi di stato restano controllati",
+      text: "Conserva i segreti in asset o credential store, riferiscili per nome e richiedi conferma esplicita prima di run con effetti reali, publish, deploy o upgrade di package."
     }
   ],
   skills: {}

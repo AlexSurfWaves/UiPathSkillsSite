@@ -117,7 +117,8 @@ const skills = [
     when: "Usala per soluzioni case-centric, dove il lavoro evolve per stati, attività umane, regole e dati associati al caso.",
     how: [
       "Parti da `sdd.md` quando esiste; altrimenti fai raccogliere a Codex le informazioni minime.",
-      "Per greenfield fai generare `tasks.md` e poi `caseplan.json` con recipe JSON dedicate.",
+      "All'avvio fai esplicitare le fasi e i checkpoint decisionali, così è chiaro quando servirà scegliere tra review, debug e publish.",
+      "Per greenfield fai generare `tasks.md` e poi `caseplan.json` con recipe JSON dedicate; se vuoi fermarti sul piano prima del build, chiedi esplicitamente una modalità review-first.",
       "Mantieni parità tra `caseplan.json` e `bindings_v2.json` prima della validazione; evita i due punti nei nomi di stage e SLA.",
       "Quando il registry non trova risorse, raggruppale per nome e tipo: crea inline solo Agent o API Workflow scelti dall'utente e usa placeholder per le altre.",
       "Per brownfield usa edit mirati e pull dello stato server quando il case esiste gia in Studio Web.",
@@ -469,12 +470,13 @@ const skills = [
     phase: "improve",
     status: "preview",
     product: "Troubleshooting",
-    files: "logs, traces, incidents, uipath.json, app config",
-    purpose: "Investiga in modo evidence-first la causa di errori, regressioni, fault, problemi runtime e comportamenti inattesi su qualunque prodotto o risorsa UiPath.",
-    when: "Usala quando l'obiettivo principale è capire perché qualcosa è fallito, anche se la richiesta nomina direttamente Orchestrator, Flow, Agent, RPA o un'altra risorsa.",
+    files: "logs, traces, incidents, diagnostic archives, app config",
+    purpose: "Investiga in modo evidence-first la causa di errori, regressioni, fault, problemi runtime e comportamenti inattesi su prodotti, activity package e UiPath Assistant.",
+    when: "Usala quando l'obiettivo principale è capire perché qualcosa è fallito, anche se la richiesta nomina direttamente Orchestrator, Flow, Agent, RPA, un activity package o condivide un archivio diagnostico di UiPath Assistant.",
     how: [
       "Parti dal segnale più forte e definisci sintomo, scope, ultimo stato noto funzionante e cambiamenti recenti.",
       "Leggi prima le investigation guide, poi scegli il playbook più vicino e usa solo i comandi documentati per raccogliere evidenze correlate.",
+      "Per UiPath Assistant, parti dall'archivio ExportDiagnoseArchive e correla `combined.log` e `Robot.log` prima di proporre il fix.",
       "Per Coded Apps, confronta `uipath.json` con l'External Application e usa i playbook dedicati per OAuth, 401/403, CORS, callback, form e deploy 404.",
       "Salva ogni risposta CLI grezza sotto la root dell'indagine e non ricostruire manualmente i file di evidenza se una redirezione fallisce.",
       "Formula ipotesi formali solo se non esiste un playbook adatto, le cause sono multiple o cross-domain, oppure le evidenze si contraddicono.",
@@ -560,7 +562,8 @@ const capabilityDetails = {
     "Crea `caseplan.json` da SDD o tramite intervista guidata quando il design non esiste, senza respingere casi complessi tramite una soglia fissa.",
     "Modifica caseplan esistenti con percorso brownfield mirato, senza rigenerare l'intero piano quando serve solo un edit.",
     "Modella case, stage, task, condizioni di ingresso/uscita, SLA, variabili globali e IO binding.",
-    "Produce `tasks.md` e lavora per fasi: interview, planning, prototyping, implementation, validate, debug, publish.",
+    "Presenta all'avvio il flusso e i checkpoint, produce `tasks.md` e lavora per fasi: interview, planning, prototyping, implementation, validate, debug, publish.",
+    "Dopo `tasks.md` procede normalmente al prototipo; si ferma per la review del piano quando l'utente chiede esplicitamente plan-only o review-first.",
     "Usa recipe JSON per plugin specifici invece di inventare manualmente strutture di case plan.",
     "Registra ogni risoluzione in `registry-resolved.json` con stage, task, tipo, cache, query, match completi, selezione e motivazione.",
     "Raggruppa le risorse mancanti per nome e tipo e crea inline solo Agent o API Workflow selezionati; le altre restano placeholder espliciti.",
@@ -703,7 +706,7 @@ const capabilityDetails = {
   "uipath-troubleshoot": [
     "Ancora l'indagine al segnale più forte, definendo sintomo, scope, ultimo stato funzionante e cambiamenti recenti.",
     "Legge le investigation guide generica e di dominio prima dei comandi, poi segue il playbook usando le forme comando esatte documentate.",
-    "Diagnostica API Workflow, Studio, Jira, CSV, file operation, Python, UI Automation, Coded Apps, Action Apps e runtime agent tramite playbook dedicati.",
+    "Diagnostica API Workflow, Studio, UiPath Assistant, Jira, OCR/Document Understanding, PDF, IPC, SAP BAPI, Slack, Terminal, System, UI Automation, Coded Apps, Action Apps e runtime agent tramite playbook dedicati.",
     "Conserva output CLI verbatim sotto la root dell'indagine e usa il fallback documentato quando il filtro esatto per nome di una queue restituisce HTTP 400.",
     "Usa ipotesi formali solo su trigger di escalation: nessun playbook adatto, cause multiple o cross-domain, oppure evidenze contraddittorie.",
     "Analizza log, trace, incident, job, queue, error code, runtime exception e storia configurativa.",
@@ -758,34 +761,75 @@ const lifecycle = [
   }
 ];
 
+const developerFlow = [
+  {
+    title: "Inquadra il risultato",
+    text: "Definisci artefatto e percorso esatti, input/output con tipi, comportamento end-to-end, vincoli e criteri di accettazione."
+  },
+  {
+    title: "Carica il contesto utile",
+    text: "Avvia una sessione fresca per il task e fornisci solo file aggiornati e rilevanti, convenzioni di progetto e PDD/SDD sanitizzati."
+  },
+  {
+    title: "Seleziona la skill",
+    text: "Nomina la skill `uipath-*` quando il task è critico e chiedi al coding agent di confermare che sia stata caricata."
+  },
+  {
+    title: "Allinea piano e checkpoint",
+    text: "Per lavori non banali, fai esplicitare piano, dipendenze e punti di approvazione prima delle modifiche; chiedi review-first se la skill procede automaticamente."
+  },
+  {
+    title: "Costruisci un incremento",
+    text: "Genera una porzione significativa ma verificabile, mantenendo il lavoro nelle attività native e nella struttura UiPath corretta."
+  },
+  {
+    title: "Verifica con UiPath",
+    text: "Esegui Workflow Analyzer, build dell'intero progetto e run locale controllato; poi confronta i file reali con i criteri di accettazione."
+  }
+];
+
+const iterationPaths = [
+  {
+    state: "pass",
+    title: "Passa",
+    text: "Esamina i file effettivi, non solo il riepilogo, quindi approva separatamente publish, deploy o altre modifiche a sistemi condivisi."
+  },
+  {
+    state: "refine",
+    title: "Gap localizzato",
+    text: "Correggi e ripeti build + verifica. In genere bastano 2–3 cicli generate-check-refine."
+  },
+  {
+    state: "restart",
+    title: "Struttura errata o errori ripetuti",
+    text: "Interrompi la catena di patch: riparti in una sessione fresca con contesto, piano o contratto del prompt corretti."
+  }
+];
+
 const guide = [
   {
-    title: "Selezione automatica, conferma esplicita",
-    text: "Il coding agent sceglie la skill dal task, ma la selezione non è garantita. Per lavori critici, nomina la skill nel prompt e chiedi di confermare che sia stata caricata."
+    title: "Tu resti l'architetto",
+    text: "Usa il coding agent come collaboratore veloce: definisci direzione e trade-off, giudica l'output e mantieni sotto approvazione le azioni che cambiano stato condiviso."
   },
   {
-    title: "Codex app come cockpit",
-    text: "Apri Codex direttamente nella root del progetto UiPath o della soluzione. Così può leggere `project.json`, `.flow`, `agent.json`, `sdd.md`, dipendenze e diff locali prima di agire."
+    title: "Contesto persistente, breve e corrente",
+    text: "Mantieni un `AGENTS.md` con skill preferite, regole di qualità, package fissati, attività da preferire o evitare e file che non devono essere sovrascritti."
   },
   {
-    title: "CLI come motore operativo",
-    text: "Il `uip` CLI è il modo migliore per validare, buildare, cercare risorse tenant, pubblicare e diagnosticare. Codex lo orchestra, interpreta JSON e aggiorna i file."
+    title: "Il prompt è un contratto di consegna",
+    text: "Specifica file e posizione, input/output e tipi, comportamento completo, vincoli, dipendenze e come sarà verificato il risultato."
   },
   {
-    title: "Prompt con artefatto e outcome",
-    text: "Scrivi richieste tipo: 'nel progetto aperto, modifica X, valida con Y, non eseguire run con effetti reali senza conferma'. È molto più efficace di un brief generico."
+    title: "Contesto rilevante, non più contesto",
+    text: "Ogni sessione parte da zero: usa una sessione per task, allega solo le fonti necessarie e rimuovi dati reali di clienti mantenendo struttura e casi limite."
   },
   {
-    title: "Design prima del build",
-    text: "Per automazioni non banali, parti da `uipath-automation-discovery` quando il cosa automatizzare non è chiaro, poi usa `uipath-planner` per SDD e piano."
+    title: "Validazione prima della fiducia",
+    text: "Cerca TODO o placeholder, attività sbagliate, selector rimossi, package non fissati, logging ed error handling mancanti; valida l'intero progetto, non solo il file modificato."
   },
   {
-    title: "Validate è diverso da run",
-    text: "Chiedi validate/build sempre; autorizza debug/run solo quando accetti effetti reali su sistemi, email, ticket, code o applicazioni aperte."
-  },
-  {
-    title: "Review come quality gate",
-    text: "Prima del deploy fai una `uipath-review` read-only. Poi chiedi alla skill specifica di correggere solo i finding prioritari."
+    title: "Segreti e cambi di stato restano controllati",
+    text: "Conserva i segreti in asset o credential store, riferiscili per nome e richiedi conferma esplicita prima di run con effetti reali, publish, deploy o upgrade di package."
   }
 ];
 
@@ -800,6 +844,8 @@ window.uipathSkillsData = {
   skills,
   capabilityDetails,
   lifecycle,
+  developerFlow,
+  iterationPaths,
   guide,
   statusLabels
 };
@@ -829,6 +875,14 @@ function localizedLifecycle(item) {
 
 function localizedGuide(item, index) {
   return translator()?.localizeGuide(item, index) || item;
+}
+
+function localizedDeveloperFlow(item, index) {
+  return translator()?.localizeDeveloperFlow(item, index) || item;
+}
+
+function localizedIterationPath(item, index) {
+  return translator()?.localizeIterationPath(item, index) || item;
 }
 
 function phaseLabel(phase) {
@@ -958,6 +1012,29 @@ function renderLifecycle() {
 }
 
 function renderGuide() {
+  document.querySelector("#developerFlow").innerHTML = developerFlow.map((item, index) => {
+    const localized = localizedDeveloperFlow(item, index);
+    return `
+    <li class="flow-step">
+      <span class="flow-step-index" aria-hidden="true">${index + 1}</span>
+      <div>
+        <h3>${localized.title}</h3>
+        <p>${localized.text}</p>
+      </div>
+    </li>
+  `;
+  }).join("");
+
+  document.querySelector("#iterationPaths").innerHTML = iterationPaths.map((item, index) => {
+    const localized = localizedIterationPath(item, index);
+    return `
+    <article class="iteration-path iteration-path-${item.state}">
+      <h4>${localized.title}</h4>
+      <p>${localized.text}</p>
+    </article>
+  `;
+  }).join("");
+
   document.querySelector("#guideGrid").innerHTML = guide.map((item, index) => {
     const localized = localizedGuide(item, index);
     return `
