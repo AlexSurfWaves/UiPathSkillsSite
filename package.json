@@ -1,0 +1,13 @@
+{
+  "name": "uipath-skills-navigator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "npm run build && node scripts/test-build.mjs"
+  }
+}

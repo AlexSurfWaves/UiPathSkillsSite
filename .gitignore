@@ -3,3 +3,4 @@ Thumbs.db
 *.log
 .local/
 node_modules/
+dist/
