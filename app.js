@@ -56,10 +56,11 @@ const skills = [
       "Apri Codex nella root che contiene `project.json`, così può rilevare framework, dipendenze e workflow.",
       "Lascia che Codex usi `uip rpa validate` per file e `uip rpa build` a livello progetto prima di dichiarare completato; la lista analyzer rules si consulta solo quando serve.",
       "Per UI automation, usa Object Repository e target capture UiPath; collega i riferimenti con il link di default e usa l'embed solo come fallback per il singolo target.",
+      "Se la destinazione è Studio Web, consegna una Solution: importa il progetto con `uip solution projects import` invece di lasciare un progetto RPA isolato.",
       "Nel debug headless, usa breakpoint per attività e interroga `debug state` fino a uno stato stabile prima di decidere il passo successivo.",
       "Per problemi UI avanzati, abilita `--profiling` per raccogliere timing per attività e screenshot prima/dopo l'esecuzione."
     ],
-    cli: ["uip rpa init", "uip rpa validate", "uip rpa build", "uip rpa debug start --breakpoints", "uip rpa debug start --profiling", "uip rpa debug state", "uip rpa debug set-breakpoints", "agents/uipath-project-discovery-agent.md"],
+    cli: ["uip rpa init", "uip rpa validate", "uip rpa build", "uip solution projects import", "uip rpa debug start --breakpoints", "uip rpa debug start --profiling", "uip rpa debug state", "uip rpa debug set-breakpoints", "agents/uipath-project-discovery-agent.md"],
     prompt: "Nel progetto RPA aperto, aggiungi un workflow XAML per processare una queue, valida il file e poi compila l'intero progetto.",
     handoffs: ["uipath-platform", "uipath-test", "uipath-solution", "uipath-agents", "uipath-maestro-flow", "uipath-troubleshoot"],
     caveat: "Per `debug` e `run` ci possono essere effetti reali su app, email, code o API: chiedi sempre a Codex di distinguere validate/build da esecuzione."
@@ -96,14 +97,16 @@ const skills = [
     purpose: "Autore e operatore per process orchestration BPMN in Maestro, con packaging, inspect, validate e diagnostica.",
     when: "Usala quando il progetto contiene BPMN o package descriptor Maestro, specialmente per processi lunghi e orchestrazioni formali.",
     how: [
-      "Chiedi a Codex di ispezionare XML BPMN e file di progetto prima di modificare.",
-      "Lascia al CLI i componenti Integration Service e i file generati di package; `bpmn init` crea automaticamente una soluzione padre quando serve.",
+      "Distingui subito discovery-only da authoring: nelle richieste di sola discovery salva `registry pull/list/get` in `registry-evidence/` e non scaffoldare un progetto.",
+      "Per authoring, usa template registry solo per i nodi posseduti dal registry e il reference strutturale per flow, gateway, eventi, loop, mapping e diagramma.",
+      "Per un progetto locale usa il layout semplice `<Project>/<Project>.bpmn`; crea Solution e package solo quando richiesti.",
+      "Nei Script Task restituisci un oggetto con `response`, mappa l'output con `result.response` e dichiara root output leggibili senza `elementId`.",
       "Usala per validazione e operatività BPMN, non per `.flow` JSON."
     ],
-    cli: ["uip maestro bpmn init", "uip maestro bpmn validate", "uip maestro bpmn package", "bindings_v2.json", "entry-points.json"],
+    cli: ["uip maestro bpmn init", "uip maestro bpmn registry pull", "uip maestro bpmn registry list --limit -1", "uip maestro bpmn registry get", "validator/validate.py", "uip maestro bpmn package", "bindings_v2.json", "entry-points.json"],
     prompt: "Rivedi questo progetto BPMN Maestro, correggi il modello e prepara la validazione/package senza toccare i file generati dal CLI.",
     handoffs: ["uipath-maestro-flow", "uipath-rpa", "uipath-agents", "uipath-troubleshoot"],
-    caveat: "È diversa da Flow: se il file principale è `.flow`, passa a `uipath-maestro-flow`."
+    caveat: "È diversa da Flow: se il file principale è `.flow`, passa a `uipath-maestro-flow`. Non esiste `uip maestro bpmn validate`: usa il validator incluso nella skill."
   },
   {
     id: "uipath-maestro-case",
@@ -119,6 +122,8 @@ const skills = [
       "Parti da `sdd.md` quando esiste; altrimenti fai raccogliere a Codex le informazioni minime.",
       "All'avvio fai esplicitare le fasi e i checkpoint decisionali, così è chiaro quando servirà scegliere tra review, debug e publish.",
       "Per greenfield fai generare `tasks.md` e poi `caseplan.json` con recipe JSON dedicate; se vuoi fermarti sul piano prima del build, chiedi esplicitamente una modalità review-first.",
+      "Mantieni il file case flat in `<Solution>/<Project>/caseplan.json`: `content/` è layout di package e `caseplan.json.bpmn` è generato.",
+      "Modella task sequenziali, event-triggered e ad hoc con le entry rule corrette; usa stage secondari come lane di eccezione e regole root per completare il case.",
       "Mantieni parità tra `caseplan.json` e `bindings_v2.json` prima della validazione; evita i due punti nei nomi di stage e SLA.",
       "Quando il registry non trova risorse, raggruppale per nome e tipo: crea inline solo Agent o API Workflow scelti dall'utente e usa placeholder per le altre.",
       "Per brownfield usa edit mirati e pull dello stato server quando il case esiste gia in Studio Web.",
@@ -157,16 +162,17 @@ const skills = [
     phase: "build",
     status: "in-development",
     product: "API Workflow",
-    files: "main.json, document.dsl",
+    files: "Workflow.json, project.uiproj, entry-points.json, bindings_v2.json",
     purpose: "Crea, valida, esegue, pubblica, opera e diagnostica workflow JSON DSL, inclusi HTTP, JavaScript, controllo di flusso e connector Integration Service.",
     when: "Usala per automazioni API-first, orchestrazioni headless, workflow JSON con `do[]` e operatività o diagnosi dopo il publish.",
     how: [
-      "Parti dai template JSON e aggiungi attività dopo WorkflowStart nella root sequence.",
+      "Crea sempre il progetto con `uip api-workflow init`: dentro una Solution per Studio Web e deploy, oppure con `--skip-solution-registration` solo per uso locale/CLI.",
+      "Non consegnare mai un `Workflow.json` isolato: anche un workflow locale deve conservare i file di progetto generati da init.",
       "Valida offline prima di eseguire con credenziali o chiamate reali.",
       "Usa registry resolve e stub per attività Integration Service, non JSON inventato a mano.",
       "Dopo il deploy gestisci trigger, connection, job, log e trace tramite le superfici `uip is`, `uip or` e `uip traces`."
     ],
-    cli: ["uip api-workflow validate", "uip api-workflow run --no-auth", "uip api-workflow registry resolve", "uip solution publish", "uip is connections list", "uip or jobs", "uip traces spans get"],
+    cli: ["uip api-workflow init", "uip api-workflow init --skip-solution-registration", "uip api-workflow validate", "uip api-workflow build", "uip api-workflow pack", "uip api-workflow run --no-auth", "uip api-workflow registry resolve", "uip solution publish", "uip is connections list", "uip or jobs", "uip traces spans get"],
     prompt: "Crea un API Workflow che chiama un endpoint REST, normalizza la risposta con JavaScript e ritorna un payload validato.",
     handoffs: ["uipath-platform", "uipath-solution", "uipath-maestro-flow", "uipath-agents", "uipath-rpa", "uipath-coded-apps"],
     caveat: "È preview/in sviluppo: tieni i file piccoli, valida spesso e separa run senza auth da run con effetti reali."
@@ -185,11 +191,13 @@ const skills = [
       "Fai installare/verificare tool `codedapp` e dipendenze TypeScript prima del build.",
       "Per Action App, definisci prima `action-schema.json` e mapping di input/output.",
       "Per dashboard, risolvi metriche, scope OAuth e sorgenti Insights/RTM prima di build e deploy.",
+      "Crea o correggi le External Application con `uip admin external-apps`; usa il portale solo come fallback quando manca autenticazione o autorizzazione admin.",
       "Per Web App e dashboard, leggi `scope` da `uipath.json`; per Action App usa `new UiPath()` senza `sdk.initialize()`.",
+      "Per Validation Station scegli il componente all-in-one o i subcomponenti composabili; condividi un solo `instanceId` e verifica asset, CSS e font sia in dev sia nel build.",
       "Usa preview/debug locale, poi pack/publish/deploy quando la UI è verificata.",
       "Nel deploy non interattivo, risolvi la folder key per workspace personale, cartella esistente o nuova cartella; per i dashboard scegli anche la modalità standalone o governance."
     ],
-    cli: ["uip codedapp create", "uip codedapp build", "uip codedapp debug", "uip codedapp pack", "references/dashboards/CAPABILITY.md"],
+    cli: ["uip codedapp create", "uip codedapp build", "uip codedapp debug", "uip codedapp pack", "uip admin external-apps", "references/widgets/validation-station.md", "references/dashboards/CAPABILITY.md"],
     prompt: "Crea una Coded Action App o un dashboard operativo UiPath, con schema/scope corretti, SDK UiPath e build verificata.",
     handoffs: ["uipath-human-in-the-loop", "uipath-tasks", "uipath-functions", "uipath-insights", "uipath-platform", "uipath-solution", "uipath-agents", "uipath-rpa"],
     caveat: "Per workflow `.cs` o `.xaml` non usare questa skill: passa a `uipath-rpa`."
@@ -249,6 +257,7 @@ const skills = [
       "Fai identificare la surface: Flow, Low-Code Agent, Maestro o Coded Action App.",
       "Per un nuovo Flow, `uip maestro flow init` crea la soluzione padre automaticamente; inizializzala prima solo per scegliere un nome personalizzato.",
       "Scegli il tipo task: QuickForm, Coded Action App, AppTask o escalation agentica.",
+      "In esecuzione non interattiva, non bloccare su una conferma se campi, outcome e output sono già chiari: applica uno schema sensato e rendilo esplicito nel report.",
       "Scrivi il nodo nel progetto e verifica output/outcome usati dai passi successivi."
     ],
     cli: ["uip solution init", "QuickForm schema", "AppTask", "CreateTask", "CreateEscalation"],
@@ -308,12 +317,14 @@ const skills = [
     when: "Usala per creare o amministrare progetti Document Understanding, caricare documenti, definire campi, rivedere estrazioni e governare le versioni del modello.",
     how: [
       "Crea il progetto da tassonomia suggerita da Autopilot, importata o vuota, poi carica i documenti necessari.",
-      "Riusa i data type IXP built-in e chiedi chiarimenti quando un nome di entità è ambiguo: non dedurre mai il target.",
+      "Verifica ogni sintassi `uip ixp` nel CLI Reference e non improvvisare un comando quando il percorso non è documentato.",
+      "Riusa i data type IXP built-in e, quando un nome è ambiguo, elenca tutti i candidati con il relativo tipo prima di chiedere conferma.",
       "Configura gruppi, campi, istruzioni di estrazione e preprocessing; poi verifica predizioni, metriche e versioni prima del publish.",
+      "Accetta come review completata la dichiarazione esplicita dell'utente sui documenti nominati; non rifare discovery inutile prima della conferma.",
       "Considera il publish come ultimo passo CLI: il deploy del modello in una folder/environment si completa nel prodotto, non con `uip ixp`.",
       "Per nodi IxP dentro `.flow`, passa invece a `uipath-maestro-flow`."
     ],
-    cli: ["uip ixp projects create", "uip ixp documents", "uip ixp groups", "uip ixp fields", "uip ixp labellings confirm --corrections", "uip ixp projects list-models", "uip ixp projects publish"],
+    cli: ["references/cli-reference.md", "uip ixp projects create", "uip ixp documents", "uip ixp groups", "uip ixp fields", "uip ixp labellings confirm --corrections", "uip ixp projects list-models", "uip ixp projects publish"],
     prompt: "Crea o aggiorna questo progetto IXP, configura tassonomia ed estrazione, rivedi le predizioni e prepara la versione corretta per il publish.",
     handoffs: ["uipath-maestro-flow", "uipath-troubleshoot", "uipath-platform"],
     caveat: "Non è la skill per modellare il Flow che usa IXP. Il deploy a una folder non è supportato dal CLI; su nomi ambigui deve fermarsi e chiedere conferma."
@@ -355,7 +366,7 @@ const skills = [
       "Per audit, specifica periodo, soggetto e risorsa.",
       "Per Orchestrator folder/jobs/processi passa a `uipath-platform`."
     ],
-    cli: ["uip admin identity", "uip admin authz", "uip admin oms", "uip admin ip-restriction", "uip admin audit"],
+    cli: ["uip admin identity", "uip admin external-apps", "uip admin authz", "uip admin oms", "uip admin ip-restriction", "uip admin audit"],
     prompt: "Elenca i gruppi e le assegnazioni ruolo rilevanti per questo tenant, poi proponi la modifica minima senza applicarla.",
     handoffs: ["uipath-platform", "uipath-rpa", "uipath-governance", "uipath-troubleshoot"],
     caveat: "Sono operazioni sensibili: privilegia read-only, conferme esplicite e output auditabile."
@@ -413,12 +424,13 @@ const skills = [
     when: "Usala per bundlare più progetti RPA, Flow, Case, Agent o API Workflow in una soluzione deployabile.",
     how: [
       "Usa layout e risorse già validate dalle skill di authoring.",
+      "Usa il gruppo canonico `uip solution projects` per add, import e remove; conserva `uip solution resources` per le risorse.",
       "Fai eseguire pack/publish/deploy con output JSON e verifiche di ambiente.",
       "Dopo modifiche alle risorse, refresh e ricrea package prima del deploy.",
       "Per feed controllati, offline o air-gapped, passa un `NuGet.config` locale con `--nuget-sources-config-path` a restore e pack.",
       "Verifica la piattaforma: Automation Cloud o Automation Suite 2.2510.0+; i project type supportati variano per versione."
     ],
-    cli: ["uip solution init", "uip solution project add", "uip solution resource refresh", "uip solution restore --nuget-sources-config-path", "uip solution pack --nuget-sources-config-path", "uip solution publish", "uip solution deploy run"],
+    cli: ["uip solution init", "uip solution projects add", "uip solution projects import", "uip solution projects remove", "uip solution resources refresh", "uip solution restore --nuget-sources-config-path", "uip solution pack --nuget-sources-config-path", "uip solution publish", "uip solution deploy run"],
     prompt: "Prepara questa soluzione UiPath per il deploy: verifica progetti inclusi, refresh risorse, pack e dimmi il comando di publish/deploy.",
     handoffs: ["uipath-platform", "uipath-planner", "uipath-rpa", "uipath-maestro-flow", "uipath-maestro-bpmn", "uipath-agents", "uipath-coded-apps", "uipath-review", "uipath-troubleshoot"],
     caveat: "Non è supportata su Standalone Orchestrator; Maestro self-hosted richiede Automation Suite 2.2510.2+. Se validate/build falliscono, torna alla skill di prodotto."
@@ -478,6 +490,7 @@ const skills = [
       "Leggi prima le investigation guide, poi scegli il playbook più vicino e usa solo i comandi documentati per raccogliere evidenze correlate.",
       "Per UiPath Assistant, parti dall'archivio ExportDiagnoseArchive e correla `combined.log` e `Robot.log` prima di proporre il fix.",
       "Per Coded Apps, confronta `uipath.json` con l'External Application e usa i playbook dedicati per OAuth, 401/403, CORS, callback, form e deploy 404.",
+      "Per activity package usa i playbook consolidati: Invoke Workflow File design/runtime, Excel non installato, file bloccati, NullReference, sheet dinamici e Outlook shared mailbox.",
       "Salva ogni risposta CLI grezza sotto la root dell'indagine e non ricostruire manualmente i file di evidenza se una redirezione fallisce.",
       "Formula ipotesi formali solo se non esiste un playbook adatto, le cause sono multiple o cross-domain, oppure le evidenze si contraddicono.",
       "Quando la causa è confermata, presenta il fix minimo e passa l'applicazione alla skill proprietaria dell'artefatto."
@@ -535,6 +548,7 @@ const capabilityDetails = {
     "Collega di default i target Object Repository tramite IdRef e usa l'embed solo per il riferimento che non si lascia collegare.",
     "Preserva l'attributo `Version` delle attività UIA `N*`, usa `TextString` come output di `NGetText` e riacquisisce i target rimontati dalle interazioni.",
     "Centralizza error-handling, UIA-only boundaries e placeholder selector pattern per evitare stub che validano ma non automatizzano.",
+    "Per una destinazione Studio Web avvolge il progetto RPA in una Solution e lo importa con il gruppo canonico `uip solution projects`.",
     "Applica la validazione in due fasi: `validate` per ciascun file modificato e `build` per l'intero progetto; consulta le analyzer rules solo on demand.",
     "Supporta debug headless con breakpoint per attività, `debug state`, aggiornamento breakpoint e attesa di uno stato stabile prima di proseguire.",
     "Raccoglie profiling avanzato con timing per attività e screenshot prima/dopo l'esecuzione tramite `uip rpa debug start --profiling`.",
@@ -554,8 +568,10 @@ const capabilityDetails = {
   "uipath-maestro-bpmn": [
     "Autore e modifica processi Maestro BPMN per orchestrazioni formali e long-running.",
     "Gestisce file `.bpmn`, `project.uiproj`, `entry-points.json`, `operate.json`, `bindings_v2.json` e package descriptor.",
-    "Scrive lo scheletro BPMN e XML UiPath non Integration Service, lasciando al CLI nodi e template IS generati.",
-    "Valida struttura, binding, entry point, packaging e operatività del processo.",
+    "Separa la discovery-only dall'authoring e salva l'evidenza registry senza creare artefatti non richiesti.",
+    "Scrive lo scheletro BPMN e le strutture non possedute dal registry, lasciando al CLI solo nodi e template registry-owned.",
+    "Mantiene tag BPMN lower-camel, diagramma completo, Script Task con `result.response` e output root ispezionabili.",
+    "Valida struttura, binding, entry point, packaging e operatività con il validator incluso nella skill, non con un comando CLI inesistente.",
     "Instrada correttamente richieste Flow JSON, RPA, agenti o Case verso skill specialistiche."
   ],
   "uipath-maestro-case": [
@@ -564,6 +580,8 @@ const capabilityDetails = {
     "Modella case, stage, task, condizioni di ingresso/uscita, SLA, variabili globali e IO binding.",
     "Presenta all'avvio il flusso e i checkpoint, produce `tasks.md` e lavora per fasi: interview, planning, prototyping, implementation, validate, debug, publish.",
     "Dopo `tasks.md` procede normalmente al prototipo; si ferma per la review del piano quando l'utente chiede esplicitamente plan-only o review-first.",
+    "Mantiene `caseplan.json` nella root del progetto e non modifica `caseplan.json.bpmn` o layout `content/` generati.",
+    "Normalizza task sequenziali, event-triggered e ad hoc, stage secondari interrupting e regole root di completamento del case.",
     "Usa recipe JSON per plugin specifici invece di inventare manualmente strutture di case plan.",
     "Registra ogni risoluzione in `registry-resolved.json` con stage, task, tipo, cache, query, match completi, selezione e motivazione.",
     "Raggruppa le risorse mancanti per nome e tipo e crea inline solo Agent o API Workflow selezionati; le altre restano placeholder espliciti.",
@@ -577,6 +595,8 @@ const capabilityDetails = {
     "Scopre via CLI i modelli LLM-as-judge, poi esegue debug, smoke eval, evaluation set, tracing, pack/deploy e version bump fino alla delivery fork."
   ],
   "uipath-api-workflow": [
+    "Scaffolda ogni workflow con `uip api-workflow init`, ottenendo la struttura `project.uiproj` compatibile Studio Web e la registrazione nella Solution quando serve.",
+    "Usa `--skip-solution-registration` solo per progetti locali/CLI e non consegna mai un `Workflow.json` isolato.",
     "Crea workflow JSON DSL per automazioni API-first con sequence, assign, JavaScript, if, loop, try/catch, wait e response.",
     "Integra HTTP manuale, managed HTTP e Integration Service connector activity tramite registry resolve e stub.",
     "Valida offline, poi esegue `run` solo con consenso quando ci sono credenziali o chiamate reali.",
@@ -592,7 +612,9 @@ const capabilityDetails = {
     "Gestisce scope OAuth da `uipath.json`, scope `Apps.Read Apps.Write` per publish headless e sorgenti Insights/RTM prima di build o deploy.",
     "Gestisce i campi Data Fabric `MULTILINE_MAX`: recupera il contenuto completo per ID, non persiste i marker di list/query e non li usa in filtri o sort.",
     "Esegue debug locale, build, pack, publish e deploy non interattivo con folder key per workspace personale, cartella esistente o nuova cartella e modalità dashboard standalone/governance.",
-    "Supporta client setup, file sync e pattern per app con document tab o form complessi; nelle Action App evita `sdk.initialize()`."
+    "Crea e aggiorna External Application con `uip admin external-apps`, preservando il portale come fallback per errori di autenticazione o permessi.",
+    "Supporta Validation Station all-in-one o componibile con subcomponenti sincronizzati, asset runtime e CSS raw verificati in dev e build.",
+    "Supporta file sync e pattern per app con document tab o form complessi; nelle Action App evita `sdk.initialize()`."
   ],
   "uipath-functions": [
     "Scaffolda Python Coded Functions con `uip functions new --language py` e genera metadati con `uip functions init`.",
@@ -616,6 +638,7 @@ const capabilityDetails = {
     "Rileva la surface corretta: `.flow`, low-code agent, Maestro BPMN o Coded Action App; per coded agent passa a `uipath-agents`.",
     "Sceglie task type tra QuickForm, Coded Action App, deployed AppTask ed escalation agentica.",
     "Definisce schema input/output, outcome, campi obbligatori, label, mapping e rami successivi.",
+    "In CI/headless applica un fallback non interattivo quando lo schema è già determinabile, invece di bloccare su una conferma impossibile.",
     "Scrive direttamente i nodi HITL appropriati e segnala cosa resta da configurare lato app/task."
   ],
   "uipath-tasks": [
@@ -634,11 +657,13 @@ const capabilityDetails = {
   ],
   "uipath-ixp": [
     "Crea progetti IXP con tassonomia suggerita da Autopilot, importata o vuota e gestisce upload, download e cancellazione dei documenti.",
+    "Verifica la sintassi nel CLI Reference prima di ogni comando e segnala quando non esiste un percorso `uip ixp` documentato.",
     "Crea gruppi e campi tassonomici riusando i data type built-in, con istruzioni per campo e per estrazione complessiva.",
     "Configura modello e preprocessing, rivede predizioni, conferma o annulla conferme e marca i campi mancanti.",
     "Corregge valori OCR illeggibili durante la conferma senza usare `--corrections` per ribaltare una predizione errata.",
     "Analizza metriche e versioni modello, quindi gestisce publish, tag e rollback.",
-    "Chiede conferma sui nomi di entità ambigui invece di selezionare un target per supposizione.",
+    "Elenca tutti i candidati e il relativo tipo quando un nome è ambiguo, invece di selezionare un target per supposizione.",
+    "Accetta una review esplicita dell'utente sui documenti nominati senza rifare discovery ridondante.",
     "Instrada i nodi document extraction dentro `.flow` verso `uipath-maestro-flow` e lascia il deploy folder/environment all'interfaccia di prodotto."
   ],
   "uipath-platform": [
@@ -681,7 +706,7 @@ const capabilityDetails = {
     "Aiuta a rendere capability aziendali richiamabili dagli agenti tramite protocollo MCP."
   ],
   "uipath-solution": [
-    "Inizializza soluzioni, aggiunge o importa progetti e gestisce `.uipx`.",
+    "Inizializza soluzioni, aggiunge/importa/rimuove progetti con `uip solution projects` e gestisce `.uipx`.",
     "Esegue resource refresh/add/remove/edit per rendere il deploy parametrico e ripetibile.",
     "Packa, pubblica, deploya, attiva e carica soluzioni verso UiPath.",
     "Usa `--nuget-sources-config-path` su restore e pack per controllare i feed in ambienti offline, air-gapped o CI.",
@@ -707,6 +732,7 @@ const capabilityDetails = {
     "Ancora l'indagine al segnale più forte, definendo sintomo, scope, ultimo stato funzionante e cambiamenti recenti.",
     "Legge le investigation guide generica e di dominio prima dei comandi, poi segue il playbook usando le forme comando esatte documentate.",
     "Diagnostica API Workflow, Studio, UiPath Assistant, Jira, OCR/Document Understanding, PDF, IPC, SAP BAPI, Slack, Terminal, System, UI Automation, Coded Apps, Action Apps e runtime agent tramite playbook dedicati.",
+    "Copre Invoke Workflow File design/runtime, Excel non installato, workbook lock, NullReference, sheet dinamici e Outlook shared mailbox con playbook consolidati.",
     "Conserva output CLI verbatim sotto la root dell'indagine e usa il fallback documentato quando il filtro esatto per nome di una queue restituisce HTTP 400.",
     "Usa ipotesi formali solo su trigger di escalation: nessun playbook adatto, cause multiple o cross-domain, oppure evidenze contraddittorie.",
     "Analizza log, trace, incident, job, queue, error code, runtime exception e storia configurativa.",

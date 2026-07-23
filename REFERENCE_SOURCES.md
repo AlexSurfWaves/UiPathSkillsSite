@@ -2,6 +2,14 @@
 
 Use these sources together when refreshing the UiPath Skills Site.
 
+## Current analyzed snapshot
+
+- Repository commit: `391093e53fbdea4c9d37a99998cebe87ce086641`
+- Snapshot date: 2026-07-23
+- Skills version: `1.199.0`
+- Target CLI: `^1.199.0`
+- Skill count: 24
+
 ## Source precedence
 
 1. [UiPath skills repository](https://github.com/UiPath/skills/tree/main/skills) - source of truth for the current skill set, each `SKILL.md`, supporting resources, `version-manifest.json`, and recent changes.
