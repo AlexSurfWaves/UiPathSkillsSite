@@ -4,10 +4,10 @@ Use these sources together when refreshing the UiPath Skills Site.
 
 ## Current analyzed snapshot
 
-- Repository commit: `391093e53fbdea4c9d37a99998cebe87ce086641`
-- Snapshot date: 2026-07-23
-- Skills version: `1.199.0`
-- Target CLI: `^1.199.0`
+- Repository commit: `f641f55250b20bcdc4dd4f5f070829948b60bd82`
+- Snapshot date: 2026-08-03
+- Skills version: `1.200.0`
+- Target CLI: `^1.200.0`
 - Skill count: 24
 
 ## Source precedence
